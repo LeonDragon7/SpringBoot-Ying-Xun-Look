@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${ying.datasource.driver-class-name}
+      url: jdbc:mysql://${ying.datasource.host}:${ying.datasource.port}/${ying.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${ying.datasource.username}
+      password: ${ying.datasource.password}
