@@ -1,5 +1,6 @@
 package com.dragon.result;
 
+import com.dragon.constant.MessageConstant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,10 +24,10 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> build(T data,ResultEnum resultEnum){
+    public static <T> Result<T> build(T data, MessageConstant messageConstant){
         Result<T> result = build(data);
-        result.setCode(resultEnum.getCode());
-        result.setMessage(resultEnum.getMessage());
+        result.setCode(messageConstant.getCode());
+        result.setMessage(messageConstant.getMessage());
         return result;
     }
 
@@ -36,7 +37,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> success(T data){
-        return build(data,ResultEnum.SUCCESS);
+        return build(data,MessageConstant.SUCCESS);
     }
 
     //操作失败
@@ -45,6 +46,6 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> fail(T data){
-        return build(data,ResultEnum.FAIL);
+        return build(data,MessageConstant.FAIL);
     }
 }
