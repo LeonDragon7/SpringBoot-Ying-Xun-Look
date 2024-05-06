@@ -11,5 +11,5 @@ spring:
       password: ${ying.datasource.password}
 
 upload:
-  directory: D:/video
-  temp: D:/tmp
+  directory: ${upload.local.directory}
+  temp: ${upload.local.temp}

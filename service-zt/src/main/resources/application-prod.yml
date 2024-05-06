@@ -12,5 +12,6 @@ ying:
 
 upload:
   local:
-    directory: D:/video
-    temp: D:/tmp
+    directory: /upload/video
+    temp: /upload/temp
+
