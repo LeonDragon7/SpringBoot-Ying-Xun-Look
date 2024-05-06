@@ -4,7 +4,7 @@ server:
 ying:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: 47.113.149.7
+    host: localhost
     port: 3306
     database: screen_flicker
     username: root
