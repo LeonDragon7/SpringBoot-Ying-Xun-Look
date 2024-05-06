@@ -17,15 +17,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Requests implements Serializable {
+public class Requests extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 求片ID
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
 
     /**
      * 用户ID

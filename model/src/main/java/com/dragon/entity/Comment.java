@@ -17,15 +17,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Comment implements Serializable {
+public class Comment extends BaseEntity{
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 评论id
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
 
     /**
      * 评论的视频id

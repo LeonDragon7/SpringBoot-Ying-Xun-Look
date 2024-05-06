@@ -17,15 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Danmu implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 弹幕ID
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+public class Danmu extends BaseEntity {
 
     /**
      * 视频ID

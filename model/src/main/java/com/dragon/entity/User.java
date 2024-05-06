@@ -17,15 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 用户ID
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+public class User extends BaseEntity {
 
     /**
      * 用户名

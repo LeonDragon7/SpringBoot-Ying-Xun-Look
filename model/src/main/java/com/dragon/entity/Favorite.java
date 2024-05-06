@@ -16,15 +16,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Favorite implements Serializable {
+public class Favorite extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 收藏ID
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
 
     /**
      * 所属用户ID

@@ -17,15 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Type implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 视频类型ID
-     */
-      @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+public class Type extends BaseEntity {
 
     /**
      * 视频类型名称
