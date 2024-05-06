@@ -4,12 +4,20 @@ server:
 ying:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
+    host: 47.113.149.7
     port: 3306
     database: screen_flicker
     username: root
     password: 123456
-
+  redis:
+    host: redis
+    port: 6379
+    database: 0
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
 upload:
   local:
     directory: D:/video

@@ -9,6 +9,16 @@ spring:
       url: jdbc:mysql://${ying.datasource.host}:${ying.datasource.port}/${ying.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${ying.datasource.username}
       password: ${ying.datasource.password}
+  redis:
+    host: ${ying.redis.host}
+    port: ${ying.redis.port}
+    password: ${ying.redis.password}
+    database: ${ying.redis.database}
+    lettuce:
+      pool:
+        max-idle: ${ying.redis.lettuce.pool.max-idle}
+        max-active: ${ying.redis.lettuce.pool.max-active}
+        min-idle: ${ying.redis.lettuce.pool.min-idle}
 
 upload:
   directory: ${upload.local.directory}
