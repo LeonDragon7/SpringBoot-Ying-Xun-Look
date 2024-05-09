@@ -48,4 +48,15 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> fail(T data){
         return build(data,MessageConstant.FAIL);
     }
+
+    //全局异常初始化
+    public Result<T> message(String msg){
+        this.message = msg;
+        return this;
+    }
+
+    public Result<T> code(Integer code){
+        this.code = code;
+        return this;
+    }
 }

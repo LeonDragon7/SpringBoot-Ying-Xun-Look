@@ -1,7 +1,10 @@
 package com.dragon.service;
 
+import com.dragon.dto.UserLoginDTO;
 import com.dragon.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     *
+     * @param userLoginDTO
+     * @return
+     */
+    void register(UserLoginDTO userLoginDTO);
 }

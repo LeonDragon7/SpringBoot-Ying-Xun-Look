@@ -17,7 +17,9 @@ public enum MessageConstant {
     MERGE_FAIL(201,"文件合并失败"),
     DELETE_FAIL(201,"文件删除失败"),
     FILE_NO(201,"文件不存在"),
-    EMAIL_FORMAT_ERROR(201,"邮箱格式不正确");
+    EMAIL_FORMAT_ERROR(201,"邮箱格式不正确"),
+    USER_EXIST(201,"用户已被注册"),
+    SEND_EMIL_FAIL(201,"发送邮件失败");
 
 
     private Integer code;

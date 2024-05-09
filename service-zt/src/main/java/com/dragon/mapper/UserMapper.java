@@ -1,7 +1,10 @@
 package com.dragon.mapper;
 
+import com.dragon.annotation.AutoFill;
 import com.dragon.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dragon.enumeration.OperationType;
+import org.apache.ibatis.annotations.Insert;
 
 /**
  * <p>
@@ -13,4 +16,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    /**
+     * 注册用户
+     * @param user
+     */
+    @Insert("INSERT INTO user(username, email, password, nickname, create_time, update_time) " +
+            "values " +
+            "(#{username},#{email},#{password},#{nickname},#{createTime},#{updateTime})")
+    @AutoFill(value = OperationType.INSERT)
+    void save(User user);
 }

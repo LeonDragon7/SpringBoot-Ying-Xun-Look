@@ -90,6 +90,10 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -117,6 +121,7 @@
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                     <include>**/*.png</include>
+                    <include>**/*.html</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>

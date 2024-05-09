@@ -19,7 +19,32 @@ spring:
         max-idle: ${ying.redis.lettuce.pool.max-idle}
         max-active: ${ying.redis.lettuce.pool.max-active}
         min-idle: ${ying.redis.lettuce.pool.min-idle}
-
+  mail:
+    host: ${ying.mail.host}
+    port: ${ying.mail.port}
+    username: ${ying.mail.username}
+    protocol: ${ying.mail.protocol}
+    password: ${ying.mail.password}
+    mail-verify:
+      ip: ${ying.mail.mail-verify.ip}
+    properties:
+      mail:
+        smtp:
+          auth: ${ying.mail.properties.mail.smtp.auth}
+          starttls:
+            enable: ${ying.mail.properties.mail.smtp.starttls.enable}
+            required: ${ying.mail.properties.mail.smtp.starttls.required}
+          ssl:
+            enable: ${ying.mail.properties.mail.smtp.ssl.enable}
+    default-encoding: ${ying.mail.default-encoding}
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.dragon.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
 upload:
   directory: ${upload.local.directory}
   temp: ${upload.local.temp}
+
