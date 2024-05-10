@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragon.mapper.UserMapper">
+
+    <!-- 根据账号或邮箱动态查找用户 -->
+    <select id="getUserByEmailOrUsername" resultType="com.dragon.entity.User" parameterType="com.dragon.dto.UserLoginDTO">
+        select * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+        </where>
+    </select>
+</mapper>
