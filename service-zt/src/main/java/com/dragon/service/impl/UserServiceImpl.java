@@ -1,16 +1,20 @@
 package com.dragon.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.dragon.constant.MessageConstant;
+import com.dragon.constant.RedisConstant;
 import com.dragon.dto.UserLoginDTO;
 import com.dragon.entity.User;
 import com.dragon.exception.RuntimeExceptionCustom;
+import com.dragon.jwt.JwtHelper;
 import com.dragon.mapper.UserMapper;
 import com.dragon.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dragon.utils.MD5;
 import com.dragon.utils.RegexUtil;
+import com.dragon.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +27,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,6 +65,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     Lock lock = new ReentrantLock();
 
     /**
+     * 用户注册
      * @param userLoginDTO
      * @return
      */
@@ -113,5 +120,52 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(MD5.encrypt(userLoginDTO.getPassword()));
 
         userMapper.save(user);
+    }
+
+    /**
+     * 用户登录
+     * @param userLoginDTO
+     * @return
+     */
+    @Override
+    public Map login(UserLoginDTO userLoginDTO) {
+        //1. 根据用户名/邮箱判断数据库是否存在用户
+        String email = userLoginDTO.getEmail();
+        String username = userLoginDTO.getUsername();
+        User user = userMapper.getUserByEmailOrUsername(userLoginDTO);
+
+        if(user == null) throw new RuntimeExceptionCustom(MessageConstant.USER_NOT_EXIST);
+
+        //2. 如果用户存在，判断是否被禁用 - status
+        if(user.getStatus().intValue() != 0) throw new RuntimeExceptionCustom(MessageConstant.DISABLE_LOGOUT);
+
+        //3. 判断密码是否正确
+        if(!MD5.encrypt(userLoginDTO.getPassword()).equals(user.getPassword())) throw new RuntimeExceptionCustom(MessageConstant.USER_PASSWORD_ERROR);
+
+        //4. 登录之后保存登录状态和信息
+
+        //4.1 生成token，登录令牌
+        String token = null;
+        if(!BeanUtil.isEmpty(email)) token = JwtHelper.createToken(user.getId().longValue(), email);
+        if(!BeanUtil.isEmpty(username)) token = JwtHelper.createToken(user.getId().longValue(), username);
+
+        //4.2 将User对象拷贝到UserVo
+        UserVo userVo = BeanUtil.copyProperties(user, UserVo.class);
+
+        //4.3 将UserVo转换为HashMap
+        Map<String, Object> map = BeanUtil.beanToMap(userVo, new HashMap<>(),
+                CopyOptions.create()
+                        .setIgnoreNullValue(true)
+                        .setFieldValueEditor((f1, f2) -> f2.toString()));
+
+        //4.4 将token保存到redis，设置有效期
+        String user_token = RedisConstant.USER_LOGIN_KEY + token;
+        redisTemplate.opsForHash().putAll(user_token,map);
+        redisTemplate.expire(user_token,RedisConstant.LOGIN_USER_TTL,TimeUnit.HOURS);
+
+        //5. 返回token
+        Map<String, Object> tokenMap = new HashMap<>();
+        tokenMap.put("token",token);
+        return tokenMap;
     }
 }

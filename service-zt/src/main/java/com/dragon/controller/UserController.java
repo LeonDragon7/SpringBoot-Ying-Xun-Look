@@ -46,6 +46,20 @@ public class UserController {
         return Result.success();
     }
 
+
+    /**
+     * 用户登录
+     * @param userLoginDTO
+     * @return
+     */
+    @ApiOperation("用户登录")
+    @PostMapping("/login")
+    public Result<Map<String,Object>> login(@RequestBody UserLoginDTO userLoginDTO){
+        log.info("登录参数：{}",userLoginDTO);
+        Map<String,Object> map = userService.login(userLoginDTO);
+        return Result.success(map);
+    }
+
     @ApiOperation("邮箱链接验证")
     @GetMapping("/verifyMail/{key}")
     public Result verifyMail(@PathVariable String key){

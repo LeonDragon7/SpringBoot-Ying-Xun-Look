@@ -1,6 +1,7 @@
 package com.dragon.mapper;
 
 import com.dragon.annotation.AutoFill;
+import com.dragon.dto.UserLoginDTO;
 import com.dragon.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dragon.enumeration.OperationType;
@@ -25,4 +26,12 @@ public interface UserMapper extends BaseMapper<User> {
             "(#{username},#{email},#{password},#{nickname},#{createTime},#{updateTime})")
     @AutoFill(value = OperationType.INSERT)
     void save(User user);
+
+    /**
+     * 根据账号或邮箱动态查找用户
+     * @param userLoginDTO
+     * @return
+     */
+    User getUserByEmailOrUsername(UserLoginDTO userLoginDTO);
+
 }

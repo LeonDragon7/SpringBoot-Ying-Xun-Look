@@ -17,9 +17,16 @@ import java.util.Map;
 public interface UserService extends IService<User> {
 
     /**
-     *
+     * 用户注册
      * @param userLoginDTO
      * @return
      */
     void register(UserLoginDTO userLoginDTO);
+
+    /**
+     * 用户登录
+     * @param userLoginDTO
+     * @return
+     */
+    Map login(UserLoginDTO userLoginDTO);
 }
