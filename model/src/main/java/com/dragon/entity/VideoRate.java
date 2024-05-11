@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class VideoRate extends BaseEntity{
+public class VideoRate {
 
     /**
      * 评论用户ID

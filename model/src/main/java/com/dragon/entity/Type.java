@@ -33,16 +33,4 @@ public class Type extends BaseEntity {
      * 类型状态 0禁用 1启用
      */
     private Integer status;
-
-    /**
-     * 上传时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
-
 }

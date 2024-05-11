@@ -37,9 +37,9 @@ public class Video extends BaseEntity {
     private String categoryName;
 
     /**
-     * 视频的收费情况 全部 免费 会员 用卷
+     * 视频的收费情况 全部 0 免费 1 会员 2
      */
-    private BigDecimal price;
+    private Integer price;
 
     /**
      * 类型ID
@@ -85,21 +85,6 @@ public class Video extends BaseEntity {
      * 状态 0审核中 1已过审 2未通过 3已删除
      */
     private Integer status;
-
-    /**
-     * 上传时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
-    /**
-     * 更新用户ID
-     */
-    private Integer updateUser;
 
     /**
      * 删除标记 0不可用 1可用

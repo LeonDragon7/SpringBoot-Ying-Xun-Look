@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserVideo extends BaseEntity {
+public class UserVideo{
 
 
     /**

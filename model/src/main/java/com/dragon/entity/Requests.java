@@ -35,10 +35,4 @@ public class Requests extends BaseEntity {
      */
     private Integer status;
 
-    /**
-     * 求片请求时间
-     */
-    private LocalDateTime createTime;
-
-
 }

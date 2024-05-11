@@ -51,14 +51,8 @@ public class Comment extends BaseEntity{
     private String content;
 
     /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
      * 逻辑删除 0未删除 1已删除
      */
     private Integer isDeleted;
-
 
 }

@@ -59,10 +59,4 @@ public class Danmu extends BaseEntity {
      */
     private Integer status;
 
-    /**
-     * 发送弹幕的日期时间
-     */
-    private LocalDateTime createTime;
-
-
 }
