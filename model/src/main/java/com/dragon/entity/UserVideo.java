@@ -19,6 +19,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class UserVideo{
 
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 观看视频的用户ID

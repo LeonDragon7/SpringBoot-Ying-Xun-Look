@@ -37,7 +37,7 @@ public class Video extends BaseEntity {
     private String categoryName;
 
     /**
-     * 视频的收费情况 全部 0 免费 1 会员 2
+     * 视频的收费情况 免费 1 会员 2
      */
     private Integer price;
 

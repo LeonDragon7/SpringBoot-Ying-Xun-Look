@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class VideoType {
 
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 视频ID

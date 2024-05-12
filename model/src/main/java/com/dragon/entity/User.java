@@ -17,8 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class User extends BaseEntity {
-
+public class User extends BaseEntity{
     /**
      * 用户名
      */
@@ -68,5 +67,4 @@ public class User extends BaseEntity {
      * 角色类型 0普通用户 1管理员 2超级管理员
      */
     private Integer role;
-
 }
