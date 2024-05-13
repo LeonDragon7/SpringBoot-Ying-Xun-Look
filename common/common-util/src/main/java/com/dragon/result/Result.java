@@ -31,6 +31,13 @@ public class Result<T> implements Serializable {
         return result;
     }
 
+    public static <T> Result<T> build(T data, Integer code,String messageConstant){
+        Result<T> result = build(data);
+        result.setCode(code);
+        result.setMessage(messageConstant);
+        return result;
+    }
+
     //操作成功
     public static <T> Result<T> success(){
         return build(null);

@@ -13,6 +13,8 @@ public enum MessageConstant {
     SUCCESS(200,"成功"),
     UPLOAD_SUCCESS(200,"上传成功"),
     FAIL(201,"失败"),
+    LOGIN_DATA_EXCEPTION(204,"登录数据异常"),
+    NO_PERMISSION(209,"没有权限"),
     UPLOAD_FAIL(201,"文件上传失败"),
     MERGE_FAIL(201,"文件合并失败"),
     DELETE_FAIL(201,"文件删除失败"),
