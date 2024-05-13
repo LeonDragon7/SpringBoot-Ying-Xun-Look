@@ -1,6 +1,5 @@
 package com.dragon.filter;
 
-import cn.hutool.core.util.StrUtil;
 import com.dragon.constant.MessageConstant;
 import com.dragon.custom.CustomUser;
 import com.dragon.dto.UserLoginDTO;
@@ -9,7 +8,8 @@ import com.dragon.result.ResponseUtil;
 import com.dragon.result.Result;
 import com.dragon.utils.JudgeParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.internal.org.objectweb.asm.Handle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,11 +32,14 @@ import java.util.Map;
  */
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    public TokenLoginFilter(AuthenticationManager authenticationManager) {
+    private RedisTemplate redisTemplate;
+
+    public TokenLoginFilter(AuthenticationManager authenticationManager, RedisTemplate redisTemplate) {
         this.setAuthenticationManager(authenticationManager);
         this.setPostOnly(false);
         //指定登录接口及提交方式，可以指定任意路径
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/client/user/login","POST"));
+        this.redisTemplate = redisTemplate;
     }
 
     /**
