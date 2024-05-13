@@ -78,7 +78,7 @@
                      无法正常显示？请复制以下链接至浏览器打开：
                      <br>
                      <a href="" title="" style="color: rgb(0, 164, 255); text-decoration: none; word-break: break-all; overflow-wrap: normal; font-size: 14px;">
-                      <span th:text="${activeUrl}">这里是激活账号的链接</span>
+                      <span id="testSpan" th:text="${activeUrl}">这里是激活账号的链接</span>
                      </a>
                     </span>
                    </p>
@@ -151,4 +151,14 @@
     </includetail>
 </div>
 </body>
+<script >
+    const a=document.querySelector("#cTMail-btn");
+    a.onclick=function (){
+        const text =document.querySelector("#testSpan")
+        console.log(text.innerText)
+        window.open(text.innerText)
+        console.log(text.innerText)
+        console.log(text.innerText[0].split("url="))
+    }
+</script>
 </html>
