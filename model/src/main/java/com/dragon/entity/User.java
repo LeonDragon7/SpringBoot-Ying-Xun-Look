@@ -67,4 +67,15 @@ public class User extends BaseEntity{
      * 角色类型 0普通用户 1管理员 2超级管理员
      */
     private Integer role;
+
+    /**
+     * 注册时间
+     */
+    private LocalDateTime createTime;
+
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
 }

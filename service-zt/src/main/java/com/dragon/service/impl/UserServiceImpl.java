@@ -27,6 +27,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -119,6 +120,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //4.2 将密码MD5加密
         user.setPassword(MD5.encrypt(userLoginDTO.getPassword()));
 
+        //4.3 设置创建更新时间
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        
         userMapper.save(user);
     }
 

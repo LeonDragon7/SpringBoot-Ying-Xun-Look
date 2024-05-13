@@ -21,10 +21,9 @@ public interface UserMapper extends BaseMapper<User> {
      * 注册用户
      * @param user
      */
-    @Insert("INSERT INTO user(username, email, password, nickname, create_time, update_time) " +
+    @Insert("INSERT INTO user(username, email, password, nickname,create_time, update_time) " +
             "values " +
             "(#{username},#{email},#{password},#{nickname},#{createTime},#{updateTime})")
-    @AutoFill(value = OperationType.INSERT)
     void save(User user);
 
     /**

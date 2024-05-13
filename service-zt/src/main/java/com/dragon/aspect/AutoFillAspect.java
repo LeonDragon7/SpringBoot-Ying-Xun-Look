@@ -3,6 +3,8 @@ package com.dragon.aspect;
 
 import com.dragon.annotation.AutoFill;
 import com.dragon.constant.AutoFillConstant;
+import com.dragon.custom.LoginUserInfoHelper;
+import com.dragon.entity.User;
 import com.dragon.enumeration.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -44,19 +46,34 @@ public class AutoFillAspect {
         Object[] args = joinPoint.getArgs();
         if(args == null || args.length == 0) return;
         Object entity = args[0];
-
         //准备赋值的数据
         LocalDateTime now = LocalDateTime.now();
+        Long currentId = LoginUserInfoHelper.getUserId();
 
         //根据当前不同的操作数据类型，为对应的属性通过反射来赋值
-        if(operationType == OperationType.INSERT || operationType == OperationType.UPDATE){
+        if(operationType == OperationType.INSERT){
             try {
                 //获得相应的set方法
                 Method setCreateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
+                Method setCreateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Integer.class);
                 Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
+                Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Integer.class);
                 //赋值
                 setCreateTime.invoke(entity,now);
+                setCreateUser.invoke(entity,currentId);
                 setUpdateTime.invoke(entity,now);
+                setUpdateUser.invoke(entity,currentId);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }else if(operationType == OperationType.UPDATE){
+            try {
+                //获得相应的set方法
+                Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
+                Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Integer.class);
+                //赋值
+                setUpdateTime.invoke(entity,now);
+                setUpdateUser.invoke(entity,currentId);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
