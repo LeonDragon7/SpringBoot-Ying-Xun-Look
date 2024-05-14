@@ -1,5 +1,6 @@
 package com.dragon.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dragon.constant.MessageConstant;
 import com.dragon.entity.Type;
@@ -18,10 +19,8 @@ import org.springframework.expression.TypedValue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -34,45 +33,41 @@ import java.util.Random;
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
 
-    @Autowired
-    private TypeService typeService;
-
-    @Autowired
-    private VideoMapper videoMapper;
-
     /**
      * 最近更新
+     * 条件：
+     * - 收费情况：1
+     * - 状态：1
+     * - 是否被删除(逻辑删除)：1
+     * - 根据最近年代获取
+     * - 获取前五条数据
      * @return
      */
     @Override
     public List<VideoVo> updateByRecent() {
-        while (true){
-            LambdaQueryWrapper<Type> queryWrapper = new LambdaQueryWrapper<>();
-            //1. 统计类型数量
-
-            //类型条件状态为1
-            queryWrapper.eq(Type::getStatus,1);
-            int countType = typeService.count(queryWrapper);
-
-            //2. 随机生成1-类型数量的值
-            Random random = new Random();
-            Integer randomCount = random.nextInt(countType) + 1;
-
-            //3. 根据随机值查询是否存在视频类型
-            queryWrapper.eq(Type::getId,randomCount);
-            Type type = typeService.getOne(queryWrapper);
-
-            //4. 根据随机类型查询视频数据
-            if(type != null){
-                //构建查询参数条件
-                Map<String, Object> map = new HashMap<>();
-                map.put("categoryName","电影");
-                map.put("price",1);
-                map.put("type",randomCount);
-                map.put("status",1);
-                map.put("isDeleted",1);
-                return videoMapper.getVideoByDynamic(map);
-            }
-        }
+        //1. 封装查询条件
+        LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Video::getPrice,1)
+                .eq(Video::getStatus,1)
+                .eq(Video::getIsDeleted,1)
+                .orderByDesc(Video::getYear)
+                .last("limit 5");
+        //2. 查询video表数据
+        List<Video> list = list(wrapper);
+//        ArrayList<VideoVo> videoVoList = new ArrayList<>();
+//        VideoVo videoVo = new VideoVo();
+//        for (Video video : list) {
+//            BeanUtil.copyProperties(video,videoVo);
+//            videoVoList.add(videoVo);
+//        }
+//        return videoVoList;
+        //3. 将数据拷贝到videoVo对象
+        List<VideoVo> videoVoList = list.stream().map(v -> {
+            VideoVo videoVo = new VideoVo();
+            BeanUtil.copyProperties(v, videoVo);
+            return videoVo;
+        }).collect(Collectors.toList());
+        //返回数据
+        return videoVoList;
     }
 }

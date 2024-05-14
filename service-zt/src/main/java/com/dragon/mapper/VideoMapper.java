@@ -2,6 +2,10 @@ package com.dragon.mapper;
 
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dragon.vo.VideoVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface VideoMapper extends BaseMapper<Video> {
 
+    /**
+     * 动态查询视频数据
+     * @param map
+     * @return
+     */
+    List<VideoVo> getVideoByDynamic(Map<String,Object> map);
 }
