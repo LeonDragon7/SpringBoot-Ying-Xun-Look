@@ -1,10 +1,8 @@
 package com.dragon.controller;
 
-
-import com.dragon.entity.User;
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
-import com.dragon.vo.VideoVo;
+import com.dragon.vo.VideoRecentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +35,14 @@ public class IndexController {
      * 最近更新
      * @return
      */
+    /**
+     * 最近更新
+     * @return
+     */
     @ApiOperation("最近更新")
     @GetMapping("/recent")
-    public Result<List<VideoVo>> RecentUpdate(){
-        List<VideoVo> recentList = videoService.updateByRecent();
+    public Result<List<VideoRecentVo>> RecentUpdate(){
+        List<VideoRecentVo> recentList = videoService.updateByRecent();
         return Result.success(recentList);
     }
 }

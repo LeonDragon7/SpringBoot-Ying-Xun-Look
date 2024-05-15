@@ -11,7 +11,7 @@ import com.dragon.mapper.VideoMapper;
 import com.dragon.service.TypeService;
 import com.dragon.service.VideoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dragon.vo.VideoVo;
+import com.dragon.vo.VideoRecentVo;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.reflect.Typed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * @return
      */
     @Override
-    public List<VideoVo> updateByRecent() {
+    public List<VideoRecentVo> updateByRecent() {
         //1. 封装查询条件
         LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Video::getPrice,1)
@@ -62,8 +62,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 //        }
 //        return videoVoList;
         //3. 将数据拷贝到videoVo对象
-        List<VideoVo> videoVoList = list.stream().map(v -> {
-            VideoVo videoVo = new VideoVo();
+        List<VideoRecentVo> videoVoList = list.stream().map(v -> {
+            VideoRecentVo videoVo = new VideoRecentVo();
             BeanUtil.copyProperties(v, videoVo);
             return videoVo;
         }).collect(Collectors.toList());
