@@ -14,6 +14,7 @@ import com.dragon.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dragon.utils.MD5;
 import com.dragon.utils.RegexUtil;
+import com.dragon.utils.UserUtil;
 import com.dragon.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +122,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(MD5.encrypt(userLoginDTO.getPassword()));
         //4.3 设置唯一标签
         user.setSoleTag(MD5.encrypt(Long.toString(System.currentTimeMillis())));
-        //4.3 设置创建更新时间
+        //4.4 设置随机头像
+        user.setAvatar(UserUtil.getRandomAvatar(user.getEmail()));
+        //4.5 设置创建更新时间
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         
