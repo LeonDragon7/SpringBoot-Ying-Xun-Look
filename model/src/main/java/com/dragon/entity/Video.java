@@ -3,6 +3,8 @@ package com.dragon.entity;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.Year;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -91,5 +93,8 @@ public class Video extends BaseEntity {
      */
     private Integer isDeleted;
 
+
+    @TableField(exist = false)
+    private Double rating;
 
 }

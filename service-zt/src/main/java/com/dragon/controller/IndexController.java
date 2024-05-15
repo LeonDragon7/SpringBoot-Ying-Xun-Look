@@ -2,6 +2,7 @@ package com.dragon.controller;
 
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
+import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoRecentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +45,17 @@ public class IndexController {
     public Result<List<VideoRecentVo>> RecentUpdate(){
         List<VideoRecentVo> recentList = videoService.updateByRecent();
         return Result.success(recentList);
+    }
+
+    /**
+     * 正在热播
+     * @return
+     */
+    @ApiOperation("正在热播")
+    @GetMapping("/hotBroadcast")
+    public Result<List<VideoHotVo>> hotBroadcast(){
+        List<VideoHotVo> hotList = videoService.hotBroadcast();
+        return Result.success(hotList);
     }
 }
 
