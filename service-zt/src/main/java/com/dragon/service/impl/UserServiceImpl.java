@@ -114,12 +114,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         BeanUtils.copyProperties(userLoginDTO,user);
 
-        //4.2 设置nickname名称
+        //4.1 设置nickname名称
         String nickName = UUID.randomUUID().toString(true).substring(0,10);
         user.setNickname("yingxun" + nickName);
         //4.2 将密码MD5加密
         user.setPassword(MD5.encrypt(userLoginDTO.getPassword()));
-
+        //4.3 设置唯一标签
+        user.setSoleTag(MD5.encrypt(Long.toString(System.currentTimeMillis())));
         //4.3 设置创建更新时间
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());

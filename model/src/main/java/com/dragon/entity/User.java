@@ -18,6 +18,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class User extends BaseEntity{
+
+    /**
+     * 用户标签
+     */
+    private String soleTag;
+
     /**
      * 用户名
      */
