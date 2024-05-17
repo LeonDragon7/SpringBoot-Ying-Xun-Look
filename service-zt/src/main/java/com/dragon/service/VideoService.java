@@ -3,7 +3,7 @@ package com.dragon.service;
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dragon.vo.VideoHotVo;
-import com.dragon.vo.VideoRecentVo;
+import com.dragon.vo.VideoReRmVo;
 
 import java.util.List;
 
@@ -21,11 +21,17 @@ public interface VideoService extends IService<Video> {
      * 最近更新
      * @return
      */
-    List<VideoRecentVo> updateByRecent();
+    List<VideoReRmVo> updateByRecent();
 
     /**
      * 正在热播
      * @return
      */
     List<VideoHotVo> hotBroadcast();
+
+    /**
+     * 电影推荐
+     * @return
+     */
+    List<VideoReRmVo> recommendMovie();
 }

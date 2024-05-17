@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dragon.mapper.VideoMapper">
     <!-- 根据随机类型查询视频数据 -->
-    <select id="getVideoByDynamic" resultType="com.dragon.vo.VideoVo" parameterType="java.util.Map">
+    <select id="getVideoByDynamic" resultType="com.dragon.vo.VideoReRmVo" parameterType="java.util.Map">
         select * from video
         <where>
             <if test="categoryName != null">
@@ -22,5 +22,19 @@
             </if>
         </where>
         order by year limit 0,5
+    </select>
+
+    <!-- 根据用户标签查询视频 -->
+    <select id="getVideoByUserTag" parameterType="java.util.Map" resultType="com.dragon.entity.Video">
+        select * from video v join user u on u.id = v.user_id
+        <where>
+            <if test="soleTag != null">
+                and u.sole_tag = #{soleTag}
+            </if>
+            <if test="categoryName != null">
+                and v.category_name = #{categoryName}
+            </if>
+        </where>
+        limit #{size}
     </select>
 </mapper>

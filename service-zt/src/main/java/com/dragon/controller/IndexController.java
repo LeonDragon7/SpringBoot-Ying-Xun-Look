@@ -3,7 +3,7 @@ package com.dragon.controller;
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
 import com.dragon.vo.VideoHotVo;
-import com.dragon.vo.VideoRecentVo;
+import com.dragon.vo.VideoReRmVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +42,8 @@ public class IndexController {
      */
     @ApiOperation("最近更新")
     @GetMapping("/recent")
-    public Result<List<VideoRecentVo>> RecentUpdate(){
-        List<VideoRecentVo> recentList = videoService.updateByRecent();
+    public Result<List<VideoReRmVo>> RecentUpdate(){
+        List<VideoReRmVo> recentList = videoService.updateByRecent();
         return Result.success(recentList);
     }
 
@@ -56,6 +56,17 @@ public class IndexController {
     public Result<List<VideoHotVo>> hotBroadcast(){
         List<VideoHotVo> hotList = videoService.hotBroadcast();
         return Result.success(hotList);
+    }
+
+    /**
+     * 电影推荐
+     * @return
+     */
+    @ApiOperation("电影推荐")
+    @GetMapping("/recommend")
+    public Result<List<VideoReRmVo>> recommendMovie(){
+        List<VideoReRmVo> videoRecommendList = videoService.recommendMovie();
+        return Result.success(videoRecommendList);
     }
 }
 

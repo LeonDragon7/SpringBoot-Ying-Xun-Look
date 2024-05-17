@@ -1,22 +1,28 @@
 package com.dragon.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.dragon.entity.BaseEntity;
-import com.dragon.entity.Type;
-import com.dragon.entity.Video;
-import com.dragon.entity.VideoType;
-import com.dragon.mapper.TypeMapper;
-import com.dragon.mapper.VideoMapper;
-import com.dragon.mapper.VideoTypeMapper;
+import com.dragon.config.VideoRecommender;
+import com.dragon.constant.RecommendConstant;
+import com.dragon.constant.RedisConstant;
+import com.dragon.custom.LoginUserInfoHelper;
+import com.dragon.entity.*;
+import com.dragon.mapper.*;
 import com.dragon.service.VideoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dragon.utils.RecommendUtil;
 import com.dragon.vo.VideoHotVo;
-import com.dragon.vo.VideoRecentVo;
+import com.dragon.vo.VideoReRmVo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +41,19 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     @Autowired
     private TypeMapper typeMapper;
+
+    @Autowired
+    private RedisApi redisApi;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private VideoRateMapper videoRateMapper;
+
+    @Autowired
+    private VideoRecommender videoRecommender;
+
     /**
      * 最近更新
      * 条件：
@@ -46,7 +65,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * @return
      */
     @Override
-    public List<VideoRecentVo> updateByRecent() {
+    public List<VideoReRmVo> updateByRecent() {
         //1. 封装查询条件
         LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Video::getPrice,1)
@@ -64,8 +83,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 //        }
 //        return videoVoList;
         //3. 将数据拷贝到videoVo对象
-        List<VideoRecentVo> videoVoList = list.stream().map(v -> {
-            VideoRecentVo videoVo = new VideoRecentVo();
+        List<VideoReRmVo> videoVoList = list.stream().map(v -> {
+            VideoReRmVo videoVo = new VideoReRmVo();
             BeanUtil.copyProperties(v, videoVo);
             return videoVo;
         }).collect(Collectors.toList());
@@ -77,6 +96,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * 正在热播
      * @return
      */
+    @Transactional
     @Override
     public List<VideoHotVo> hotBroadcast() {
         //1. 查询video表关联评分表数据
@@ -123,5 +143,62 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             videoHotVoList.add(videoHotVo);
         }
         return videoHotVoList;
+    }
+
+    /**
+     * 电影推荐
+     * @return
+     */
+    @Override
+    public List<VideoReRmVo> recommendMovie() {
+        List<Video> recommendVideoList = new ArrayList<>();
+        int userId = LoginUserInfoHelper.getUserId().intValue();
+        String recommend = "";
+        //1.用户已登录
+        User user = userMapper.selectById(userId);
+        if(user != null){
+            //1.1 load缓存数据
+            recommend = redisApi.getString(RecommendUtil.getKey(RedisConstant.RECOMMEND_MOVIE,user.getSoleTag()));
+            //1.2 缓存数据是空
+            if(StrUtil.isBlank(recommend)){
+                //用户打过分且分类名称是电影
+                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(userId, RecommendConstant.RECOMMEND_MOVIE);
+                if(!videoRateList.isEmpty()){
+                    //基于用户推荐
+                    try {
+                        List<Integer> movieIdList = videoRecommender.itemBasedRecommender(userId, RecommendConstant.RECOMMEND_SIZE);
+                        recommendVideoList.addAll(this.listByIds(movieIdList));
+                    } catch (TasteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }else {
+                // 从缓存中直接加载
+                recommendVideoList.addAll(JSONObject.parseArray(recommend,Video.class));
+            }
+        }else{
+                //2.随机返回数据
+                recommendVideoList.addAll(this.baseMapper.findAllByCountLimit(RecommendConstant.RECOMMEND_SIZE));
+        }
+        //3.上述异常，直接通过用户标签查询数据库并推荐
+        if(recommendVideoList.isEmpty() && user != null){
+            Map<String, Object> map = new HashMap<>();
+            map.put("soleTag",user.getSoleTag());
+            map.put("size",RecommendConstant.RECOMMEND_SIZE);
+            map.put("categoryName",RecommendConstant.RECOMMEND_MOVIE);
+            recommendVideoList.addAll(this.baseMapper.getVideoByUserTag(map));
+        }
+        if(StringUtils.isEmpty(recommend)){
+            assert user != null;
+            redisApi.setValue(RecommendUtil.getKey(RedisConstant.RECOMMEND_MOVIE,user.getSoleTag()),JSONObject.toJSONString(recommendVideoList),1, TimeUnit.DAYS);
+        }
+
+        //4.返回数据
+        List<VideoReRmVo> videoReRmVoList = recommendVideoList.stream().map(video -> {
+            VideoReRmVo videoReRmVo = new VideoReRmVo();
+            BeanUtil.copyProperties(video, videoReRmVo);
+            return videoReRmVo;
+        }).collect(Collectors.toList());
+        return videoReRmVoList;
     }
 }

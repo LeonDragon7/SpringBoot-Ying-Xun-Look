@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dragon.mapper.VideoRateMapper">
-
+    <!-- 动态查询用户打过分 动漫 or 电影 -->
+    <select id="findAllByUserId" resultType="com.dragon.entity.VideoRate">
+        select * from video_rate v1 join video v2 on v2.id = v1.video_id
+        <where>
+            <if test="categoryName != null">
+                and v2.category_name = #{categoryName}
+            </if>
+            <if test="userId != null">
+                and v1.user_id = #{userId}
+            </if>
+        </where>
+    </select>
 </mapper>

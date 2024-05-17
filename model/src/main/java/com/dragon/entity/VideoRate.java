@@ -1,6 +1,7 @@
 package com.dragon.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class VideoRate {
     private Integer id;
 
     /**
-     * 评论用户ID
+     * 评分用户ID
      */
     private Integer userId;
 
@@ -37,9 +38,7 @@ public class VideoRate {
     private Double rating;
 
     /**
-     * 评论人数
+     * 评分人数
      */
     private Long count;
-
-
 }

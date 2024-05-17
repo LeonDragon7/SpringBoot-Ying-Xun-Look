@@ -2,8 +2,10 @@ package com.dragon.vo;
 
 import lombok.Data;
 
+import java.time.Year;
+
 @Data
-public class VideoRecentVo {
+public class VideoReRmVo {
 
     private Integer id;
     /**
@@ -15,4 +17,9 @@ public class VideoRecentVo {
      * 封面url
      */
     private String coverUrl;
+
+    /**
+     * 视频的年代
+     */
+    private Year year;
 }
