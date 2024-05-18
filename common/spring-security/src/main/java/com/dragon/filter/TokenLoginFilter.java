@@ -52,7 +52,9 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
+            //获取用户的信息
             UserLoginDTO userLoginDTO = new ObjectMapper().readValue(request.getInputStream(), UserLoginDTO.class);
+            //将获取的用户名和密码进行封装
             Authentication authenticationToken = new UsernamePasswordAuthenticationToken(JudgeParam.isUserNameOrEmail(userLoginDTO), userLoginDTO.getPassword());
             return this.getAuthenticationManager().authenticate(authenticationToken);
         } catch (IOException e) {
