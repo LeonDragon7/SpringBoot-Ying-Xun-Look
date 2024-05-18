@@ -63,9 +63,20 @@ public class IndexController {
      * @return
      */
     @ApiOperation("电影推荐")
-    @GetMapping("/recommend")
+    @GetMapping("/recommendMovie")
     public Result<List<VideoReRmVo>> recommendMovie(){
         List<VideoReRmVo> videoRecommendList = videoService.recommendMovie();
+        return Result.success(videoRecommendList);
+    }
+
+    /**
+     * 动漫推荐
+     * @return
+     */
+    @ApiOperation("电影推荐")
+    @GetMapping("/recommendAnime")
+    public Result<List<VideoReRmVo>> recommendAnime(){
+        List<VideoReRmVo> videoRecommendList = videoService.recommendAnime();
         return Result.success(videoRecommendList);
     }
 }

@@ -34,4 +34,11 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     List<VideoReRmVo> recommendMovie();
+
+    /**
+     * 动漫推荐
+     * @return
+     */
+    List<VideoReRmVo> recommendAnime();
+
 }

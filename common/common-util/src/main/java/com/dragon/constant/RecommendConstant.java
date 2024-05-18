@@ -15,7 +15,7 @@ public class RecommendConstant {
      * 推荐分类名称
      */
     public final static String RECOMMEND_MOVIE = "电影";
-    public final static String RECOMMEND_Anime = "动漫";
+    public final static String RECOMMEND_ANIME = "动漫";
 
 
 }

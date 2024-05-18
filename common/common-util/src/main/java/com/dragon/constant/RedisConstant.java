@@ -14,5 +14,5 @@ public class RedisConstant {
     /**
      * 推荐常用类
      */
-    public static final String RECOMMEND_MOVIE = "recommend";
+    public static final String RECOMMEND = "recommend";
 }
