@@ -151,55 +151,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Override
     public List<VideoReRmVo> recommendMovie() {
-        List<Video> recommendVideoList = new ArrayList<>();
-        int userId = LoginUserInfoHelper.getUserId().intValue();
-        String recommend = "";
-        //1.用户已登录
-        User user = userMapper.selectById(userId);
-        if(user != null){
-            //1.1 load缓存数据
-            recommend = redisApi.getString(RecommendUtil.getKey(RedisConstant.RECOMMEND,user.getSoleTag()));
-            //1.2 缓存数据是空
-            if(StrUtil.isBlank(recommend)){
-                //用户打过分且分类名称是电影
-                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(userId, RecommendConstant.RECOMMEND_MOVIE);
-                if(!videoRateList.isEmpty()){
-                    //基于用户推荐
-                    try {
-                        List<Integer> movieIdList = videoRecommender.itemBasedRecommender(userId, RecommendConstant.RECOMMEND_SIZE);
-                        recommendVideoList.addAll(this.listByIds(movieIdList));
-                    } catch (TasteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }else {
-                // 从缓存中直接加载
-                recommendVideoList.addAll(JSONObject.parseArray(recommend,Video.class));
-            }
-        }else{
-                //2.随机返回数据
-                recommendVideoList.addAll(this.baseMapper.findAllByCountLimit(RecommendConstant.RECOMMEND_SIZE));
-        }
-        //3.上述异常，直接通过用户标签查询数据库并推荐
-        if(recommendVideoList.isEmpty() && user != null){
-            Map<String, Object> map = new HashMap<>();
-            map.put("soleTag",user.getSoleTag());
-            map.put("size",RecommendConstant.RECOMMEND_SIZE);
-            map.put("categoryName",RecommendConstant.RECOMMEND_MOVIE);
-            recommendVideoList.addAll(this.baseMapper.getVideoByUserTag(map));
-        }
-        if(StringUtils.isEmpty(recommend)){
-            assert user != null;
-            redisApi.setValue(RecommendUtil.getKey(RedisConstant.RECOMMEND,user.getSoleTag()),JSONObject.toJSONString(recommendVideoList),1, TimeUnit.DAYS);
-        }
-
-        //4.返回数据
-        List<VideoReRmVo> videoReRmVoList = recommendVideoList.stream().map(video -> {
-            VideoReRmVo videoReRmVo = new VideoReRmVo();
-            BeanUtil.copyProperties(video, videoReRmVo);
-            return videoReRmVo;
-        }).collect(Collectors.toList());
-        return videoReRmVoList;
+        return this.recommend(RecommendConstant.RECOMMEND_MOVIE);
     }
 
     /**
@@ -208,6 +160,14 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Override
     public List<VideoReRmVo> recommendAnime() {
+      return this.recommend(RecommendConstant.RECOMMEND_ANIME);
+    }
+
+    /**
+     * 推荐功能
+     * @return
+     */
+    private List<VideoReRmVo> recommend(String categoryName) {
         List<Video> recommendVideoList = new ArrayList<>();
         int userId = LoginUserInfoHelper.getUserId().intValue();
         String recommend = "";
@@ -218,8 +178,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             recommend = redisApi.getString(RecommendUtil.getKey(RedisConstant.RECOMMEND,user.getSoleTag()));
             //1.2 缓存数据是空
             if(StrUtil.isBlank(recommend)){
-                //用户打过分且分类名称是电影
-                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(userId, RecommendConstant.RECOMMEND_ANIME);
+                //用户打过分且分类名称是电影或者动漫
+                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(userId, categoryName);
                 if(!videoRateList.isEmpty()){
                     //基于用户推荐
                     try {
@@ -242,7 +202,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             Map<String, Object> map = new HashMap<>();
             map.put("soleTag",user.getSoleTag());
             map.put("size",RecommendConstant.RECOMMEND_SIZE);
-            map.put("categoryName",RecommendConstant.RECOMMEND_ANIME);
+            map.put("categoryName",categoryName);
             recommendVideoList.addAll(this.baseMapper.getVideoByUserTag(map));
         }
         if(StringUtils.isEmpty(recommend)){
