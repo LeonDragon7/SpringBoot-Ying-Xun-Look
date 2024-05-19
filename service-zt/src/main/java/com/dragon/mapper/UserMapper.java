@@ -21,9 +21,9 @@ public interface UserMapper extends BaseMapper<User> {
      * 注册用户
      * @param user
      */
-    @Insert("INSERT INTO user(username, email, password, nickname,create_time, update_time) " +
+    @Insert("INSERT INTO user(sole_tag,username, email, password, nickname,avatar,create_time, update_time) " +
             "values " +
-            "(#{username},#{email},#{password},#{nickname},#{createTime},#{updateTime})")
+            "(#{soleTag},#{username},#{email},#{password},#{nickname},#{avatar},#{createTime},#{updateTime})")
     void save(User user);
 
     /**
