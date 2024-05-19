@@ -92,9 +92,4 @@ public class Video extends BaseEntity {
      * 删除标记 0不可用 1可用
      */
     private Integer isDeleted;
-
-
-    @TableField(exist = false)
-    private Double rating;
-
 }

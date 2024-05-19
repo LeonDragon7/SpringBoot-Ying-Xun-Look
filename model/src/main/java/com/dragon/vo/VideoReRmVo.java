@@ -22,4 +22,9 @@ public class VideoReRmVo {
      * 视频的年代
      */
     private Year year;
+
+    /**
+     * 评分
+     */
+    private Double rating;
 }

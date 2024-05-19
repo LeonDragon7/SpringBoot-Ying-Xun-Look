@@ -39,5 +39,5 @@ public class VideoHotVo {
     /**
      * 视频类型
      */
-    List<Type> typeList = new ArrayList<>();
+    List<String> typeList = new ArrayList<>();
 }
