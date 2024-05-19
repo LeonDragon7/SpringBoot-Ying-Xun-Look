@@ -2,8 +2,10 @@ package com.dragon.service;
 
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
+import com.dragon.vo.VideoVo;
 
 import java.util.List;
 
@@ -41,4 +43,10 @@ public interface VideoService extends IService<Video> {
      */
     List<VideoReRmVo> recommendAnime();
 
+    /**
+     * 获取视频详细信息
+     * @param id
+     * @return
+     */
+    VideoDetailVo getVideoDetail(Integer id);
 }

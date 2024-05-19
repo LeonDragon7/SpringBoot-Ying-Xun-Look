@@ -13,8 +13,10 @@ import com.dragon.mapper.*;
 import com.dragon.service.VideoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dragon.utils.RecommendUtil;
+import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
+import com.dragon.vo.VideoVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,10 +102,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public List<VideoHotVo> hotBroadcast() {
         //1. 查询video表关联评分表数据
-        List<Video> videoWithRatingList = this.baseMapper.selectVideoWithRating();
+        List<VideoVo> videoWithRatingList = this.baseMapper.selectVideoWithRating();
         //2. 获取视频id
-        List<Integer> videoIdList = videoWithRatingList.stream().map(BaseEntity::getId).collect(Collectors.toList());
-        //3. 通过视频id查询关联表对应的类型id
+        List<Integer> videoIdList = videoWithRatingList.stream().map(VideoVo::getId).collect(Collectors.toList());
+        //3. 通过视频id集合查询关联表对应的类型id
         List<List<Integer>> allVideoTypeIds = new ArrayList<>();
 
         for (Integer videoId : videoIdList) {
@@ -133,13 +135,14 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         //5. 封装vo对象条件
         List<VideoHotVo> videoHotVoList = new ArrayList<>();
         VideoHotVo videoHotVo = new VideoHotVo();
-        for (Video video : videoWithRatingList) {
-            videoHotVo.setId(video.getId());
-            videoHotVo.setTitle(video.getTitle());
-            videoHotVo.setCoverUrl(video.getCoverUrl());
-            videoHotVo.setCategoryName(video.getCategoryName());
+        for (VideoVo videoVo : videoWithRatingList) {
+            videoHotVo.setId(videoVo.getId());
+            videoHotVo.setTitle(videoVo.getTitle());
+            videoHotVo.setCoverUrl(videoVo.getCoverUrl());
+            videoHotVo.setCategoryName(videoVo.getCategoryName());
             videoHotVo.setVideoCount(1);
-            videoHotVo.setRating(video.getRating());
+            videoHotVo.setRating(videoVo.getRating());
+            videoHotVo.setTypeList(typeNameList);
             videoHotVoList.add(videoHotVo);
         }
         return videoHotVoList;
@@ -217,5 +220,42 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             return videoReRmVo;
         }).collect(Collectors.toList());
         return videoReRmVoList;
+    }
+
+    /**
+     * 获取视频详细信息
+     * @param id
+     * @return
+     */
+    @Override
+    public VideoDetailVo getVideoDetail(Integer id) {
+        LambdaQueryWrapper<VideoType> wrapper = new LambdaQueryWrapper<>();
+
+        //1. 根据id查询video表关联评分表详细信息
+        List<VideoVo> videoWithRatingList  = this.baseMapper.getVideoDetail(id);
+
+        //2. 根据视频id获取视频类型id
+        wrapper.eq(VideoType::getVideoId,id);
+        List<VideoType> videoTypeList = videoTypeMapper.selectList(wrapper);
+        List<Integer> typeIdList = videoTypeList.stream().map(type -> type.getTypeId()).collect(Collectors.toList());
+
+        //3. 根据视频类型id获取类型信息
+        LambdaQueryWrapper<Type> typeWrapper = new LambdaQueryWrapper<>();
+        typeWrapper.eq(Type::getStatus,1) // 类型状态为1
+                .select(Type::getTypeName); // 指定要查询的字段
+
+        typeWrapper.in(Type::getId,typeIdList); //构建in子句
+
+        //4. 获取类型名称
+        List<String> typeNameList = typeMapper.selectList(typeWrapper)
+                .stream()
+                .map(Type::getTypeName)
+                .collect(Collectors.toList());
+
+        //5. 封装视频详情和类型名称
+        VideoDetailVo videoDetailVo = new VideoDetailVo();
+        videoDetailVo.setVideoWithRating(videoWithRatingList);
+        videoDetailVo.setVideoTypeList(typeNameList);
+        return videoDetailVo;
     }
 }
