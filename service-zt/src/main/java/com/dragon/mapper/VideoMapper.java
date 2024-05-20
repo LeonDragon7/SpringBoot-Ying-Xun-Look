@@ -55,6 +55,6 @@ public interface VideoMapper extends BaseMapper<Video> {
      * @param id
      * @return
      */
-    @Select("select v1.title,v1.coverUrl,v1.region,v1.duration,v1.language,v1.description,v1.year,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where v1.id = #{videoId}")
+    @Select("select v1.title,v1.cover_url,v1.region,v1.duration,v1.language,v1.description,v1.year,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where v1.id = #{videoId}")
     List<VideoVo> getVideoDetail(@Param("videoId") Integer id);
 }
