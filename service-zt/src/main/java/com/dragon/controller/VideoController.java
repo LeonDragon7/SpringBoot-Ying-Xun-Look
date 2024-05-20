@@ -5,6 +5,7 @@ import com.dragon.annotation.AutoFill;
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
 import com.dragon.vo.VideoDetailVo;
+import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,17 @@ public class VideoController {
     public Result<VideoDetailVo> getById(@PathVariable Integer id){
         VideoDetailVo videoDetail =  videoService.getVideoDetail(id);
         return Result.success(videoDetail);
+    }
+
+    /**
+     * 猜你喜欢
+     * @return
+     */
+    @ApiOperation("猜你喜欢")
+    @GetMapping("/like")
+    public Result<List<VideoReRmVo>> like(){
+        List<VideoReRmVo> videoLikeList = videoService.getLike();
+        return Result.success(videoLikeList);
     }
 
 }

@@ -56,4 +56,10 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     Map<String,Object> getHotRating();
+
+    /**
+     * 猜你喜欢
+     * @return
+     */
+    List<VideoReRmVo> getLike();
 }

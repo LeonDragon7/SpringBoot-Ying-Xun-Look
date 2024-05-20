@@ -56,6 +56,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Autowired
     private VideoRecommender videoRecommender;
 
+    @Autowired
+    private UserVideoMapper userVideoMapper;
+
     /**
      * 最近更新
      * 条件：
@@ -283,5 +286,49 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             map.put("hotRatingList",videoReRmVoValue);
         }
         return map;
+    }
+
+    /**
+     * 猜你喜欢
+     * @return
+     */
+    @Override
+    public List<VideoReRmVo> getLike() {
+        //1. 获取当前用户id
+        Integer userId = LoginUserInfoHelper.getUser().getId();
+        //2. 根据当前用户id获取用户视频关联信息
+        LambdaQueryWrapper<UserVideo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserVideo::getCollect,1)// 收藏 1
+                .eq(UserVideo::getUserId,userId) // 当前用户ID
+                .orderByDesc(UserVideo::getPlayCount)// 播放次数倒序
+                .orderByDesc(UserVideo::getPlayTime)// 播放最近时间倒序
+                .last("limit 5");
+        List<UserVideo> userVideoList = userVideoMapper.selectList(wrapper);
+
+        //3. 根据用户视频关联表获取视频id集合
+        List<Integer> videoIds = userVideoList.stream().map(videoId -> videoId.getVideoId()).collect(Collectors.toList());
+
+        //4. 根据视频id集合获取视频数据
+        LambdaQueryWrapper<Video> videoWrapper = new LambdaQueryWrapper<>();
+        videoWrapper.in(BaseEntity::getId,videoIds);
+        List<Video> videoList = this.list(videoWrapper);
+        //5. 判断是否存在五条数据
+        int size = videoList.size();
+        if(size < 5 && !videoList.isEmpty()){
+            //随机返回视频
+            List<Video> allByCountLimit = this.baseMapper.findAllByCountLimit(5 - size);
+            videoList.addAll(allByCountLimit);
+        }else if(videoList.isEmpty()){
+            //返回高分视频
+            return this.baseMapper.getHotRating();
+        }
+        //6. 封装数据
+        List<VideoReRmVo> videoReRmVoList = videoList.stream().map(v -> {
+            VideoReRmVo videoReRmVo = new VideoReRmVo();
+            BeanUtil.copyProperties(v, videoReRmVo);
+            return videoReRmVo;
+        }).collect(Collectors.toList());
+        //7. 返回数据
+        return videoReRmVoList;
     }
 }
