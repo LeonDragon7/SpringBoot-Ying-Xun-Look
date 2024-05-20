@@ -8,6 +8,7 @@ import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,4 +50,10 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     VideoDetailVo getVideoDetail(Integer id);
+
+    /**
+     * 高分影视
+     * @return
+     */
+    Map<String,Object> getHotRating();
 }

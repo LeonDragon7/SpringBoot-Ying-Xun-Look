@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -78,6 +79,17 @@ public class IndexController {
     public Result<List<VideoReRmVo>> recommendAnime(){
         List<VideoReRmVo> videoRecommendList = videoService.recommendAnime();
         return Result.success(videoRecommendList);
+    }
+
+    /**
+     * 高分影视
+     * @return
+     */
+    @ApiOperation("高分影视")
+    @GetMapping("/hotRating")
+    public Result<Map<String,Object>> hotRating(){
+        Map<String,Object> hotRatingList = videoService.getHotRating();
+        return Result.success(hotRatingList);
     }
 }
 

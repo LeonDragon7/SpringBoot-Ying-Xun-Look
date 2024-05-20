@@ -258,4 +258,30 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         videoDetailVo.setVideoTypeList(typeNameList);
         return videoDetailVo;
     }
+
+    /**
+     * 高分影视
+     * @return
+     */
+    @Override
+    public Map<String,Object> getHotRating() {
+        //1. 根据key获取高分数据
+        String hotRatingValue = redisApi.getString(RedisConstant.HOT_RATING);
+        //2. 判断是否存在高分数据
+        Map<String, Object> map = new HashMap<>(2, 1);
+        if(StrUtil.isBlank(hotRatingValue)){
+            //3. 不存在
+            //3.1 获取高分影视
+            List<VideoReRmVo> hotRatingList = this.baseMapper.getHotRating();
+            //3.2 保存到redis
+            redisApi.setValue(RedisConstant.HOT_RATING,JSONObject.toJSONString(hotRatingList),RedisConstant.HOT_RATING_TIME,TimeUnit.DAYS);
+            map.put("hotRatingList",hotRatingList);
+        }else{
+            //4. 存在
+            //4.1 将数据类型转换成实体类
+            List<VideoReRmVo> videoReRmVoValue = JSONObject.parseArray(hotRatingValue, VideoReRmVo.class);
+            map.put("hotRatingList",videoReRmVoValue);
+        }
+        return map;
+    }
 }
