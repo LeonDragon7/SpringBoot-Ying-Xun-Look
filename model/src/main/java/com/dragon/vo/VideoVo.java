@@ -26,6 +26,11 @@ public class VideoVo {
     private String coverUrl;
 
     /**
+     * 视频url
+     */
+    private String videoUrl;
+
+    /**
      * 视频的制作地区
      */
     private String region;
