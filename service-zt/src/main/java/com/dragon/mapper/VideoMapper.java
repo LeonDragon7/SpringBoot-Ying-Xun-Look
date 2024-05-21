@@ -4,10 +4,10 @@ import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -66,4 +66,12 @@ public interface VideoMapper extends BaseMapper<Video> {
      */
     @Select("select v1.title,v1.cover_url,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 order by rating limit 0,5")
     List<VideoReRmVo> getHotRating();
+
+    /**
+     * 动态条件分页查询
+     * @param map
+     * @return
+     */
+    Page<VideoVo> pageList(Map<String,Object> map);
+
 }

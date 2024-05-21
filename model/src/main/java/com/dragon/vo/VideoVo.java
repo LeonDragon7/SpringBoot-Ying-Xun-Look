@@ -2,6 +2,7 @@ package com.dragon.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,4 +60,14 @@ public class VideoVo {
      *  视频评分
      */
     private Double rating;
+
+    /**
+     * 播放次数
+     */
+    private Integer playCount;
+
+    /**
+     * 最近播放时间
+     */
+    private LocalDateTime playTime;
 }

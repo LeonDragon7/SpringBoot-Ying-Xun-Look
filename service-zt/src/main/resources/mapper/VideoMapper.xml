@@ -37,4 +37,39 @@
         </where>
         limit #{size}
     </select>
+
+    <!-- 动态条件分页查询 -->
+    <select id="pageList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+        select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
+        <where>
+            <if test = "title != null and titile != ''">
+                and title like concat('%',#{vp.title},'%')
+            </if>
+            <if test = "categoryName != null and categoryName != ''">
+                and category_name like concat('%',#{vp.categoryName},'%')
+            </if>
+            <if test = "price != null and price != ''">
+                and price like concat('%',#{vp.price},'%')
+            </if>
+            <if test = "type != null and type != ''">
+                and type like concat('%',#{vp.type},'%')
+            </if>
+            <if test = "year != null and year != ''">
+                and year like concat('%',#{vp.year},'%')
+            </if>
+            <if test = "region != null and region != ''">
+                and region like concat('%',#{vp.region},'%')
+            </if>
+        </where>
+        <if test="beginTime != null">
+            and uv.play_time &gt; #{begin.beginTime}
+        </if>
+        <if test="endTime != null">
+            and uv.play_time &lt; #{end.endTime}
+        </if>
+
+
+    </select>
 </mapper>
+
+

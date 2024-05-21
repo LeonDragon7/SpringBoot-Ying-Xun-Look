@@ -1,7 +1,9 @@
 package com.dragon.service;
 
+import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dragon.result.PageResult;
 import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
@@ -62,4 +64,11 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     List<VideoReRmVo> getLike();
+
+    /**
+     * 视频条件分页查询
+     * @param videoPageQueryDTO
+     * @return
+     */
+    PageResult pageList(VideoPageQueryDTO videoPageQueryDTO);
 }

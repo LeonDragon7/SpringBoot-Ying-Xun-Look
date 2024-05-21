@@ -8,8 +8,10 @@ import com.dragon.config.VideoRecommender;
 import com.dragon.constant.RecommendConstant;
 import com.dragon.constant.RedisConstant;
 import com.dragon.custom.LoginUserInfoHelper;
+import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.*;
 import com.dragon.mapper.*;
+import com.dragon.result.PageResult;
 import com.dragon.service.VideoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dragon.utils.RecommendUtil;
@@ -17,12 +19,18 @@ import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -330,5 +338,49 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }).collect(Collectors.toList());
         //7. 返回数据
         return videoReRmVoList;
+    }
+
+    /**
+     * 视频条件分页查询
+     * @param videoPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageList(VideoPageQueryDTO videoPageQueryDTO) {
+        //1. 获取当前的时间
+        LocalDateTime now = LocalDateTime.now();
+        Map<String, Object> map = new HashMap<>();
+        //2. 计算本周的星期一的零点
+        LocalDateTime beginTime = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .with(LocalTime.MIDNIGHT);
+
+        //3. 计算当前时间本周的星期天的23:59:59
+        LocalDateTime endTime = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                .with(LocalTime.MAX)
+                .minusNanos(1); // 减去一个纳秒，将时间调整为23:59:59
+
+        //4. 封装数据
+        map.put("begin",beginTime);
+        map.put("end",endTime);
+        map.put("vp",videoPageQueryDTO);
+
+        return page(map);
+    }
+
+    /**
+     * 分页查询
+     * @param map
+     * @return
+     */
+    private PageResult page(Map<String,Object> map){
+        //select * from video join ... limit 0,pageSize;
+
+        //分页查询
+        VideoPageQueryDTO vp = (VideoPageQueryDTO) map.get("vp");
+        PageHelper.startPage(vp.getPage(), vp.getPageSize());
+
+        Page<VideoVo> pageResult = this.baseMapper.pageList(map);
+
+        return new PageResult(pageResult.getTotal(),pageResult.getResult());
     }
 }

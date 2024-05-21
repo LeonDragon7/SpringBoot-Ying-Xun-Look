@@ -2,6 +2,8 @@ package com.dragon.controller;
 
 
 import com.dragon.annotation.AutoFill;
+import com.dragon.dto.VideoPageQueryDTO;
+import com.dragon.result.PageResult;
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
 import com.dragon.vo.VideoDetailVo;
@@ -9,11 +11,7 @@ import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,5 +53,16 @@ public class VideoController {
         return Result.success(videoLikeList);
     }
 
+    /**
+     * 视频条件分页查询
+     * @param videoPageQueryDTO
+     * @return
+     */
+    @ApiOperation("视频条件分页")
+    @GetMapping("/pageQuery")
+    public Result<PageResult> pageQuery(VideoPageQueryDTO videoPageQueryDTO){
+        PageResult pageResult = videoService.pageList(videoPageQueryDTO);
+        return Result.success(pageResult);
+    }
 }
 
