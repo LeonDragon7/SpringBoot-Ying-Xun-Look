@@ -42,33 +42,48 @@
     <select id="pageList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
         select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
         <where>
-            <if test = "title != null and titile != ''">
-                and title like concat('%',#{vp.title},'%')
+            <if test = "title != null and title != ''">
+                and title like concat('%',#{title},'%')
             </if>
             <if test = "categoryName != null and categoryName != ''">
-                and category_name like concat('%',#{vp.categoryName},'%')
+                and category_name like concat('%',#{categoryName},'%')
             </if>
             <if test = "price != null and price != ''">
-                and price like concat('%',#{vp.price},'%')
+                and price like concat('%',#{price},'%')
             </if>
             <if test = "type != null and type != ''">
-                and type like concat('%',#{vp.type},'%')
+                and type like concat('%',#{type},'%')
             </if>
             <if test = "year != null and year != ''">
-                and year like concat('%',#{vp.year},'%')
+                and year like concat('%',#{year},'%')
             </if>
             <if test = "region != null and region != ''">
-                and region like concat('%',#{vp.region},'%')
+                and region like concat('%',#{region},'%')
             </if>
+            <if test = "weekTag != null and weekTag == 1">
+                # 时间播放字段  本周热播字段
+                <if test="begin != null">
+                    and play_time &gt; #{begin}
+                </if>
+                <if test="end != null">
+                    and play_time &lt; #{end}
+                </if>
+            </if>
+            <choose>
+                <when test = "historyTag != null and historyTag == 2">
+                    <!-- 历史热播 -->
+                    order by play_count desc
+                </when>
+                <when test = "newTag != null and newTag == 3">
+                    <!-- 最新上线 -->
+                    order by create_time desc
+                </when>
+                <when test = "ratingTag != null and ratingTag == 4">
+                    <!-- 最受欢迎 -->
+                    order by rating desc
+                </when>
+            </choose>
         </where>
-        <if test="beginTime != null">
-            and uv.play_time &gt; #{begin.beginTime}
-        </if>
-        <if test="endTime != null">
-            and uv.play_time &lt; #{end.endTime}
-        </if>
-
-
     </select>
 </mapper>
 
