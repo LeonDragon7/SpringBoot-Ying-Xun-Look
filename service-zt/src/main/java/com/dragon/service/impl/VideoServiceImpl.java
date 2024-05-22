@@ -8,6 +8,7 @@ import com.dragon.config.VideoRecommender;
 import com.dragon.constant.RecommendConstant;
 import com.dragon.constant.RedisConstant;
 import com.dragon.custom.LoginUserInfoHelper;
+import com.dragon.dto.HistoryViewQueryDTO;
 import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.*;
 import com.dragon.mapper.*;
@@ -389,6 +390,29 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             //最受欢迎
             pageResult = this.baseMapper.pageRatingList(map);
         }
+        return new PageResult(pageResult.getTotal(),pageResult.getResult());
+    }
+
+    /**
+     * 历史观看
+     * @param historyViewQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult historyView(HistoryViewQueryDTO historyViewQueryDTO) {
+        //1. 获取当前用户id
+        Integer userId = LoginUserInfoHelper.getUser().getId();
+
+        //2. 分页查询
+        PageHelper.startPage(historyViewQueryDTO.getPage(),historyViewQueryDTO.getPageSize());
+
+        //3. 封装信息
+        Map<String, Object> map = new HashMap<>();
+        map.put("id",userId);
+        map.put("hp",historyViewQueryDTO);
+        Page<VideoVo> pageResult = this.baseMapper.historyView(map);
+
+        //4.返回数据
         return new PageResult(pageResult.getTotal(),pageResult.getResult());
     }
 }

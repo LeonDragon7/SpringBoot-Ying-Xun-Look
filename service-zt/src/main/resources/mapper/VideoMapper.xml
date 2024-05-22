@@ -121,6 +121,13 @@
             order by rating desc
         </where>
     </select>
+
+    <!-- 分页查询 - 历史观看 -->
+    <select id="historyView" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+        select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
+        where user_id = #{id.userId} and uv.play_time is not null
+        order by play_count;
+    </select>
 </mapper>
 
 

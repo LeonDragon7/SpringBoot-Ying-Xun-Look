@@ -1,6 +1,7 @@
 package com.dragon.controller;
 
 
+import com.dragon.dto.HistoryViewQueryDTO;
 import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.result.PageResult;
 import com.dragon.result.Result;
@@ -63,5 +64,16 @@ public class VideoController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 历史观看
+     * @param historyViewQueryDTO
+     * @return
+     */
+    @ApiOperation("历史观看")
+    @GetMapping("/historyView")
+    public Result<PageResult> historyView(HistoryViewQueryDTO historyViewQueryDTO){
+        PageResult pageResult = videoService.historyView(historyViewQueryDTO);
+        return Result.success(pageResult);
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.dragon.service;
 
+import com.dragon.dto.HistoryViewQueryDTO;
 import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -72,4 +73,10 @@ public interface VideoService extends IService<Video> {
     PageResult pageList(VideoPageQueryDTO videoPageQueryDTO);
 
 
+    /**
+     * 历史观看
+     * @param historyViewQueryDTO
+     * @return
+     */
+    PageResult historyView(HistoryViewQueryDTO historyViewQueryDTO);
 }

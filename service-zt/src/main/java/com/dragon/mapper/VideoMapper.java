@@ -88,4 +88,10 @@ public interface VideoMapper extends BaseMapper<Video> {
      */
     Page<VideoVo> pageRatingList(Map<String,Object> map);
 
+    /**
+     * 分页查询 - 历史观看
+     * @param map
+     * @return
+     */
+    Page<VideoVo> historyView(Map<String, Object> map);
 }
