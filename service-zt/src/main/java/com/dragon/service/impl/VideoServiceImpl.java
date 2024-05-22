@@ -152,7 +152,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             videoHotVo.setTitle(videoVo.getTitle());
             videoHotVo.setCoverUrl(videoVo.getCoverUrl());
             videoHotVo.setCategoryName(videoVo.getCategoryName());
-            videoHotVo.setVideoCount(1);
+            videoHotVo.setPlayCount(1);
             videoHotVo.setRating(videoVo.getRating());
             videoHotVo.setTypeList(typeNameList);
             videoHotVoList.add(videoHotVo);
@@ -414,5 +414,39 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         //4.返回数据
         return new PageResult(pageResult.getTotal(),pageResult.getResult());
+    }
+
+    /**
+     * 每周更新
+     * @return
+     */
+    @Override
+    public List<VideoReRmVo> weekUpdate() {
+        while (true){
+            //1. 统计视频表的类型数量
+            LambdaQueryWrapper<Type> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Type::getStatus,1);
+            Integer typeCount = typeMapper.selectCount(wrapper);
+
+            //2. 随机生成1-类型数量的值
+            Random random = new Random();
+            int randomType = random.nextInt(typeCount) + 1;
+
+            //3. 根据随机值查询是否存在视频类型
+            wrapper.clear();
+            wrapper.eq(Type::getId,randomType);
+            Type type = typeMapper.selectOne(wrapper);
+
+            //4. 如果类型存在，则根据随机类型查询视频数据
+            if(type != null){
+                Map<String, Object> map = new HashMap<>();
+                map.put("categoryName", "电影");
+                map.put("price", 1);
+                map.put("type", typeCount);
+                map.put("status", 1);
+                map.put("isDeleted", 1);
+                return this.baseMapper.getVideoByDynamic(map);
+            }
+        }
     }
 }

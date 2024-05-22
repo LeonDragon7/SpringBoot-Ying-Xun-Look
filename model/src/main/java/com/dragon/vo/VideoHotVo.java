@@ -29,7 +29,7 @@ public class VideoHotVo {
     /**
      * 视频观看人数
      */
-    private Integer videoCount;
+    private Integer playCount;
 
     /**
      * 评分

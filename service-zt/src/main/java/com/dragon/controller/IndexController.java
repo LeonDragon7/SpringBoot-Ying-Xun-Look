@@ -8,13 +8,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+
+import static org.yaml.snakeyaml.nodes.NodeId.sequence;
 
 /**
  * <p>
@@ -90,6 +96,23 @@ public class IndexController {
     public Result<Map<String,Object>> hotRating(){
         Map<String,Object> hotRatingList = videoService.getHotRating();
         return Result.success(hotRatingList);
+    }
+
+    /**
+     * 每周更新
+     */
+    @ApiOperation("每周更新")
+    @GetMapping(value = "/weekUpdate",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Result<Flux<ServerSentEvent<List<VideoReRmVo>>>> weekUpdate(){
+        return Result.success(Flux.interval(Duration.ofDays(7))
+                .map(sequence ->{
+                    List<VideoReRmVo> weekUpdateList = videoService.weekUpdate();
+                    return ServerSentEvent.<List<VideoReRmVo>>builder()
+                            .id(String.valueOf(sequence))
+                            .event("weekUpdate")
+                            .data(weekUpdateList)
+                            .build();
+                }));
     }
 }
 

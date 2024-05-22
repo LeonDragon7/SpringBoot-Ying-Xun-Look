@@ -79,4 +79,10 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     PageResult historyView(HistoryViewQueryDTO historyViewQueryDTO);
+
+    /**
+     * 每周更新
+     * @return
+     */
+    List<VideoReRmVo> weekUpdate();
 }
