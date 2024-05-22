@@ -38,8 +38,8 @@
         limit #{size}
     </select>
 
-    <!-- 动态条件分页查询 -->
-    <select id="pageList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+    <!-- 动态条件分页查询 - 本周热播/历史热播 -->
+    <select id="pageWeekList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
         select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
         <where>
             <if test = "title != null and title != ''">
@@ -60,29 +60,65 @@
             <if test = "region != null and region != ''">
                 and region like concat('%',#{region},'%')
             </if>
-            <if test = "weekTag != null and weekTag == 1">
-                # 时间播放字段  本周热播字段
-                <if test="begin != null">
-                    and play_time &gt; #{begin}
-                </if>
-                <if test="end != null">
-                    and play_time &lt; #{end}
-                </if>
+            <if test="begin != null">
+                and play_time &gt; #{begin}
             </if>
-            <choose>
-                <when test = "historyTag != null and historyTag == 2">
-                    <!-- 历史热播 -->
-                    order by play_count desc
-                </when>
-                <when test = "newTag != null and newTag == 3">
-                    <!-- 最新上线 -->
-                    order by create_time desc
-                </when>
-                <when test = "ratingTag != null and ratingTag == 4">
-                    <!-- 最受欢迎 -->
-                    order by rating desc
-                </when>
-            </choose>
+            <if test="end != null">
+                and play_time &lt; #{end}
+            </if>
+            order by play_count desc
+        </where>
+    </select>
+
+    <!-- 动态条件分页查询 - 最新上线 -->
+    <select id="pageNewList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+        select * from video
+        <where>
+            <if test = "title != null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test = "categoryName != null and categoryName != ''">
+                and category_name like concat('%',#{categoryName},'%')
+            </if>
+            <if test = "price != null and price != ''">
+                and price like concat('%',#{price},'%')
+            </if>
+            <if test = "type != null and type != ''">
+                and type like concat('%',#{type},'%')
+            </if>
+            <if test = "year != null and year != ''">
+                and year like concat('%',#{year},'%')
+            </if>
+            <if test = "region != null and region != ''">
+                and region like concat('%',#{region},'%')
+            </if>
+            order by create_time desc
+        </where>
+    </select>
+
+    <!-- 动态条件分页查询 - 最受欢迎 -->
+    <select id="pageRatingList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+        select * from video join screen_flicker.video_rate vr on video.id = vr.video_id
+        <where>
+            <if test = "title != null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test = "categoryName != null and categoryName != ''">
+                and category_name like concat('%',#{categoryName},'%')
+            </if>
+            <if test = "price != null and price != ''">
+                and price like concat('%',#{price},'%')
+            </if>
+            <if test = "type != null and type != ''">
+                and type like concat('%',#{type},'%')
+            </if>
+            <if test = "year != null and year != ''">
+                and year like concat('%',#{year},'%')
+            </if>
+            <if test = "region != null and region != ''">
+                and region like concat('%',#{region},'%')
+            </if>
+            order by rating desc
         </where>
     </select>
 </mapper>

@@ -42,27 +42,9 @@ public class VideoPageQueryDTO implements Serializable {
     private String region;
 
     /**
-     * 本周热播标识
+     * 分页接口标识
      */
-    private Integer weekTag;
-
-
-    /**
-     * 历史热播标识
-     */
-    private Integer historyTag;
-
-
-    /**
-     * 最新上线标识
-     */
-    private Integer newTag;
-
-
-    /**
-     * 最受欢迎标识
-     */
-    private Integer ratingTag;
+    private Integer pageTag;
 
     /**
      * 页码

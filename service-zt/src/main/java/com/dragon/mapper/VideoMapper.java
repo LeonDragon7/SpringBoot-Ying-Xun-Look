@@ -68,10 +68,24 @@ public interface VideoMapper extends BaseMapper<Video> {
     List<VideoReRmVo> getHotRating();
 
     /**
-     * 动态条件分页查询
+     * 动态条件分页查询 - 本周热播/历史热播
      * @param map
      * @return
      */
-    Page<VideoVo> pageList(Map<String,Object> map);
+    Page<VideoVo> pageWeekList(Map<String,Object> map);
+
+    /**
+     * 动态条件分页查询 - 最新上线
+     * @param map
+     * @return
+     */
+    Page<VideoVo> pageNewList(Map<String,Object> map);
+
+    /**
+     * 动态条件分页查询 - 最受欢迎
+     * @param map
+     * @return
+     */
+    Page<VideoVo> pageRatingList(Map<String,Object> map);
 
 }

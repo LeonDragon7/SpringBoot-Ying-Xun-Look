@@ -7,7 +7,6 @@ import com.dragon.result.PageResult;
 import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
-import com.dragon.vo.VideoVo;
 
 import java.util.List;
 import java.util.Map;
@@ -71,4 +70,6 @@ public interface VideoService extends IService<Video> {
      * @return
      */
     PageResult pageList(VideoPageQueryDTO videoPageQueryDTO);
+
+
 }

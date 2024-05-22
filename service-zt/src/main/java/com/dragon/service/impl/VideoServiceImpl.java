@@ -347,23 +347,23 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Override
     public PageResult pageList(VideoPageQueryDTO videoPageQueryDTO) {
-        //1. 获取当前的时间
-        LocalDateTime now = LocalDateTime.now();
         Map<String, Object> map = new HashMap<>();
-        //2. 计算本周的星期一的零点
+
+        //1. 本周热播
+        //1.1 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //1.2 计算本周的星期一的零点
         LocalDateTime beginTime = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 .with(LocalTime.MIDNIGHT);
-
-        //3. 计算当前时间本周的星期天的23:59:59
+        //1.3 计算当前时间本周的星期天的23:59:59
         LocalDateTime endTime = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
                 .with(LocalTime.MAX)
                 .minusNanos(1); // 减去一个纳秒，将时间调整为23:59:59
-
-        //4. 封装数据
+        //2. 封装数据
         map.put("begin",beginTime);
         map.put("end",endTime);
         map.put("vp",videoPageQueryDTO);
-
+        //3. 返回数据
         return page(map);
     }
 
@@ -374,13 +374,21 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     private PageResult page(Map<String,Object> map){
         //select * from video join ... limit 0,pageSize;
-
         //分页查询
         VideoPageQueryDTO vp = (VideoPageQueryDTO) map.get("vp");
+        Integer pageTag = vp.getPageTag();
         PageHelper.startPage(vp.getPage(), vp.getPageSize());
-
-        Page<VideoVo> pageResult = this.baseMapper.pageList(map);
-
+        Page<VideoVo> pageResult = null;
+        if(pageTag == 1 || pageTag == 2){
+            //本周热播/历史热播
+            pageResult = this.baseMapper.pageWeekList(map);
+        }else if(pageTag == 3){
+            //最新上线
+            pageResult = this.baseMapper.pageNewList(map);
+        }else if(pageTag == 4){
+            //最受欢迎
+            pageResult = this.baseMapper.pageRatingList(map);
+        }
         return new PageResult(pageResult.getTotal(),pageResult.getResult());
     }
 }
