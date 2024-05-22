@@ -89,6 +89,29 @@ public class Video extends BaseEntity {
     private Integer status;
 
     /**
+     * 注册时间
+     */
+    private LocalDateTime createTime;
+
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
+
+    /**
+     * 注册用户
+     */
+    private Integer createUser;
+
+
+    /**
+     * 更新用户
+     */
+    private Integer updateUser;
+
+
+    /**
      * 删除标记 0不可用 1可用
      */
     private Integer isDeleted;
