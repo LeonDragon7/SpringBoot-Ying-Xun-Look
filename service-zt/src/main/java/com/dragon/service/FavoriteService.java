@@ -13,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FavoriteService extends IService<Favorite> {
 
+    /**
+     * 点击收藏
+     * @param id 视频id
+     * @return
+     */
+    Integer collect(Integer id);
 }
