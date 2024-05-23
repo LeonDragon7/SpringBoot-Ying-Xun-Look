@@ -3,7 +3,7 @@ package com.dragon.dto;
 import lombok.Data;
 
 @Data
-public class HistoryViewQueryDTO {
+public class CommonQueryDTO {
     /**
      * 页码
      */

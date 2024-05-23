@@ -1,6 +1,6 @@
 package com.dragon.service;
 
-import com.dragon.dto.HistoryViewQueryDTO;
+import com.dragon.dto.CommonQueryDTO;
 import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -75,14 +75,21 @@ public interface VideoService extends IService<Video> {
 
     /**
      * 历史观看
-     * @param historyViewQueryDTO
+     * @param commonQueryDTO
      * @return
      */
-    PageResult historyView(HistoryViewQueryDTO historyViewQueryDTO);
+    PageResult historyView(CommonQueryDTO commonQueryDTO);
 
     /**
      * 每周更新
      * @return
      */
     List<VideoReRmVo> weekUpdate();
+
+    /**
+     * 会员专区
+     * @param commonQueryDTO
+     * @return
+     */
+    PageResult prefecture(CommonQueryDTO commonQueryDTO);
 }

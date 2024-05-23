@@ -39,7 +39,7 @@
     </select>
 
     <!-- 动态条件分页查询 - 本周热播/历史热播 -->
-    <select id="pageWeekList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+    <select id="pageWeekList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
         <where>
             <if test = "title != null and title != ''">
@@ -71,7 +71,7 @@
     </select>
 
     <!-- 动态条件分页查询 - 最新上线 -->
-    <select id="pageNewList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+    <select id="pageNewList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video
         <where>
             <if test = "title != null and title != ''">
@@ -97,7 +97,7 @@
     </select>
 
     <!-- 动态条件分页查询 - 最受欢迎 -->
-    <select id="pageRatingList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+    <select id="pageRatingList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video join screen_flicker.video_rate vr on video.id = vr.video_id
         <where>
             <if test = "title != null and title != ''">
@@ -123,7 +123,7 @@
     </select>
 
     <!-- 分页查询 - 历史观看 -->
-    <select id="historyView" parameterType="java.util.Map" resultType="com.dragon.vo.VideoVo">
+    <select id="historyView" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
         where user_id = #{id.userId} and uv.play_time is not null
         order by play_count;

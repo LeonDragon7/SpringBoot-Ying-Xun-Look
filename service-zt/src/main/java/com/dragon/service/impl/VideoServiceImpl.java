@@ -5,12 +5,14 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dragon.config.VideoRecommender;
+import com.dragon.constant.MessageConstant;
 import com.dragon.constant.RecommendConstant;
 import com.dragon.constant.RedisConstant;
 import com.dragon.custom.LoginUserInfoHelper;
-import com.dragon.dto.HistoryViewQueryDTO;
+import com.dragon.dto.CommonQueryDTO;
 import com.dragon.dto.VideoPageQueryDTO;
 import com.dragon.entity.*;
+import com.dragon.exception.RuntimeExceptionCustom;
 import com.dragon.mapper.*;
 import com.dragon.result.PageResult;
 import com.dragon.service.VideoService;
@@ -22,6 +24,7 @@ import com.dragon.vo.VideoReRmVo;
 import com.dragon.vo.VideoVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -379,7 +382,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         VideoPageQueryDTO vp = (VideoPageQueryDTO) map.get("vp");
         Integer pageTag = vp.getPageTag();
         PageHelper.startPage(vp.getPage(), vp.getPageSize());
-        Page<VideoVo> pageResult = null;
+        Page<VideoReRmVo> pageResult = null;
         if(pageTag == 1 || pageTag == 2){
             //本周热播/历史热播
             pageResult = this.baseMapper.pageWeekList(map);
@@ -395,22 +398,22 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     /**
      * 历史观看
-     * @param historyViewQueryDTO
+     * @param commonQueryDTO
      * @return
      */
     @Override
-    public PageResult historyView(HistoryViewQueryDTO historyViewQueryDTO) {
+    public PageResult historyView(CommonQueryDTO commonQueryDTO) {
         //1. 获取当前用户id
         Integer userId = LoginUserInfoHelper.getUser().getId();
 
         //2. 分页查询
-        PageHelper.startPage(historyViewQueryDTO.getPage(),historyViewQueryDTO.getPageSize());
+        PageHelper.startPage(commonQueryDTO.getPage(), commonQueryDTO.getPageSize());
 
         //3. 封装信息
         Map<String, Object> map = new HashMap<>();
         map.put("id",userId);
-        map.put("hp",historyViewQueryDTO);
-        Page<VideoVo> pageResult = this.baseMapper.historyView(map);
+        map.put("hp", commonQueryDTO);
+        Page<VideoReRmVo> pageResult = this.baseMapper.historyView(map);
 
         //4.返回数据
         return new PageResult(pageResult.getTotal(),pageResult.getResult());
@@ -448,5 +451,38 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 return this.baseMapper.getVideoByDynamic(map);
             }
         }
+    }
+
+    /**
+     * 会员专区
+     * @param commonQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult prefecture(CommonQueryDTO commonQueryDTO) {
+        //1. 获取当前用户id
+        Integer userId = LoginUserInfoHelper.getUser().getId();
+        //2. 根据当前用户id查询是否为会员用户
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>();
+        wrapper.eq(User::getId,userId)
+                .eq(User::getStatus,0);
+        User user = userMapper.selectOne(wrapper);
+        //3. 非会员用户
+        if(user.getVip() == 0) throw  new RuntimeExceptionCustom(MessageConstant.NO_VIP_USER);
+        //4. 分页查询视频数据
+        PageHelper.startPage(commonQueryDTO.getPage(),commonQueryDTO.getPageSize());
+        LambdaQueryWrapper<Video> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Video::getStatus,1)
+                .eq(Video::getIsDeleted,1);
+        //5. 类似转换
+        List<VideoReRmVo> videoReRmVoList = this.baseMapper.selectList(queryWrapper).stream().map(v -> {
+            VideoReRmVo videoReRmVo = new VideoReRmVo();
+            BeanUtil.copyProperties(v, videoReRmVo);
+            return videoReRmVo;
+        }).collect(Collectors.toList());
+        //6. 获取分页信息
+        PageInfo<VideoReRmVo> pageResult = new PageInfo<>(videoReRmVoList);
+        //7.返回数据
+        return new PageResult(pageResult.getTotal(),videoReRmVoList);
     }
 }

@@ -1,5 +1,6 @@
 package com.dragon.mapper;
 
+import com.dragon.dto.CommonQueryDTO;
 import com.dragon.entity.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dragon.vo.VideoReRmVo;
@@ -72,26 +73,27 @@ public interface VideoMapper extends BaseMapper<Video> {
      * @param map
      * @return
      */
-    Page<VideoVo> pageWeekList(Map<String,Object> map);
+    Page<VideoReRmVo> pageWeekList(Map<String,Object> map);
 
     /**
      * 动态条件分页查询 - 最新上线
      * @param map
      * @return
      */
-    Page<VideoVo> pageNewList(Map<String,Object> map);
+    Page<VideoReRmVo> pageNewList(Map<String,Object> map);
 
     /**
      * 动态条件分页查询 - 最受欢迎
      * @param map
      * @return
      */
-    Page<VideoVo> pageRatingList(Map<String,Object> map);
+    Page<VideoReRmVo> pageRatingList(Map<String,Object> map);
 
     /**
      * 分页查询 - 历史观看
      * @param map
      * @return
      */
-    Page<VideoVo> historyView(Map<String, Object> map);
+    Page<VideoReRmVo> historyView(Map<String, Object> map);
+
 }

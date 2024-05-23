@@ -24,7 +24,8 @@ public enum MessageConstant {
     SEND_EMIL_FAIL(201,"发送邮件失败"),
     USER_NOT_EXIST(201,"用户不存在"),
     DISABLE_LOGOUT(201,"用户被禁用或注销"),
-    USER_PASSWORD_ERROR(201,"用户密码错误");
+    USER_PASSWORD_ERROR(201,"用户密码错误"),
+    NO_VIP_USER(201,"该用户为普通用户，无法访问");
 
 
     private Integer code;
