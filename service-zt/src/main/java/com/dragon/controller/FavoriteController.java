@@ -37,8 +37,8 @@ public class FavoriteController {
     @ApiOperation("点击收藏")
     @GetMapping("/collect/{id}")
     public Result<Integer> collect(@PathVariable Integer id){
-        Integer  favorite = favoriteService.collect(id);
-        return Result.success();
+        Integer favorite = favoriteService.collect(id);
+        return Result.success(favorite);
     }
 }
 
