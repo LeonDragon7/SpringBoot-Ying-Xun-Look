@@ -187,7 +187,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     private List<VideoReRmVo> recommend(String categoryName) {
         List<Video> recommendVideoList = new ArrayList<>();
-        int userId = LoginUserInfoHelper.getUserId().intValue();
+        int userId = LoginUserInfoHelper.getUser().getId();
         String recommend = "";
         //1.用户已登录
         User user = userMapper.selectById(userId);
@@ -318,7 +318,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         List<UserVideo> userVideoList = userVideoMapper.selectList(wrapper);
 
         //3. 根据用户视频关联表获取视频id集合
-        List<Integer> videoIds = userVideoList.stream().map(videoId -> videoId.getVideoId()).collect(Collectors.toList());
+        List<Integer> videoIds = userVideoList.stream().map(UserVideo::getVideoId).collect(Collectors.toList());
 
         //4. 根据视频id集合获取视频数据
         LambdaQueryWrapper<Video> videoWrapper = new LambdaQueryWrapper<>();

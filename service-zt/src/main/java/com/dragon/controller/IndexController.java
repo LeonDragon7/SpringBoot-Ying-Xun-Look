@@ -102,7 +102,7 @@ public class IndexController {
      * 每周更新
      */
     @ApiOperation("每周更新")
-    @GetMapping(value = "/weekUpdate",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/weekUpdate")
     public Result<Flux<ServerSentEvent<List<VideoReRmVo>>>> weekUpdate(){
         return Result.success(Flux.interval(Duration.ofDays(7))
                 .map(sequence ->{
