@@ -1,5 +1,6 @@
 package com.dragon.filter;
 
+import com.alibaba.fastjson2.JSON;
 import com.dragon.constant.MessageConstant;
 import com.dragon.custom.CustomUser;
 import com.dragon.dto.UserLoginDTO;
@@ -73,9 +74,12 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        //获取当前用户
         CustomUser customerUser = (CustomUser) authResult.getPrincipal();
+        //生成token
         String token = JwtHelper.createToken(customerUser.getUser().getId().longValue(), customerUser.getUser().getUsername());
-
+        //保存权限数据
+        redisTemplate.opsForValue().set(customerUser.getUser().getUsername(), JSON.toJSONString(customerUser.getAuthorities()));
         Map<String, Object> map = new HashMap<>();
         map.put("token",token);
         ResponseUtil.out(response, Result.success(map));

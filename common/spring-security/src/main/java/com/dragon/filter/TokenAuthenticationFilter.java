@@ -1,6 +1,7 @@
 package com.dragon.filter;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.dragon.constant.MessageConstant;
 import com.dragon.constant.RedisConstant;
 import com.dragon.custom.LoginUserInfoHelper;
@@ -10,6 +11,7 @@ import com.dragon.result.Result;
 import com.dragon.vo.UserVo;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,9 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.dragon.constant.RedisConstant.LOGIN_USER_TTL;
@@ -79,6 +79,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 LoginUserInfoHelper.saveUser(userVo);
                 //刷新token有效期
                 redisTemplate.expire(key,LOGIN_USER_TTL, TimeUnit.MINUTES);
+
+                // 获取用户权限信息并创建SimpleGrantedAuthority对象列表
+                List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                // 获取用户权限信息
+                List<String> authoritiesList = (List<String>) map.get("authorities");
+                if (authoritiesList != null) {
+                    for (String authority : authoritiesList) {
+                        authorities.add(new SimpleGrantedAuthority(authority));
+                    }
+                }
+                // 返回UsernamePasswordAuthenticationToken对象
+                return new UsernamePasswordAuthenticationToken(username, null, authorities);
+            }else {
+                return new UsernamePasswordAuthenticationToken(username,null,new ArrayList<>());
             }
         }
         return null;
