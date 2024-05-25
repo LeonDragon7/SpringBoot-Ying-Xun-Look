@@ -80,7 +80,7 @@ public class IndexController {
      * 动漫推荐
      * @return
      */
-    @ApiOperation("电影推荐")
+    @ApiOperation("动漫推荐")
     @GetMapping("/recommendAnime")
     public Result<List<VideoReRmVo>> recommendAnime(){
         List<VideoReRmVo> videoRecommendList = videoService.recommendAnime();
