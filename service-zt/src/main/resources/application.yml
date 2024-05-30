@@ -3,6 +3,8 @@ spring:
     active: dev
   main:
     allow-circular-references: true
+  mvc:
+    static-path-pattern: /static/**
   datasource:
     druid:
       driver-class-name: ${ying.datasource.driver-class-name}

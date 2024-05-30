@@ -4,13 +4,13 @@ server:
 ying:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
+    host: 47.113.149.7
     port: 3306
     database: screen_flicker
     username: root
     password: 123456
   redis:
-    host: localhost
+    host: 47.113.149.7
     port: 6379
     password: 888888
     database: 0
@@ -19,9 +19,27 @@ ying:
         max-idle: 16
         max-active: 32
         min-idle: 8
+  mail:
+    host: smtp.qq.com
+    port: 465
+    default-encoding: UTF-8
+    username: 209418465@qq.com
+    protocol: smtp
+    password: laasrbxbnlpnbjda
+    mail-verify:
+      ip: http://47.113.149.7:8888/client/user/verifyMail/
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
 
 upload:
   local:
-    directory: /upload/video
-    temp: /upload/temp
+    directory: service-zt/src/main/resources/static/video
+    temp: service-zt/src/main/resources/static/temp
 
