@@ -136,30 +136,30 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
 
         //4. 根据对应类型id集合查询类型名称
-        LambdaQueryWrapper<Type> typeWrapper = new LambdaQueryWrapper<>();
-        for (List<Integer> videoTypeId : allVideoTypeIds) {
-            typeWrapper.eq(Type::getStatus,1) // 类型状态为1
-                    .in(Type::getId,videoTypeId) //构建in子句
+        for (int i = 0; i < videoWithRatingList.size(); i++) {
+            VideoVo videoVo = videoWithRatingList.get(i);//获取视频返回对象
+            List<Integer> videoTypeIds = allVideoTypeIds.get(i);//获取视频对于的类型
+
+            LambdaQueryWrapper<Type> typeWrapper = new LambdaQueryWrapper<>();
+            typeWrapper.eq(Type::getStatus, 1) // 类型状态为1
+                    .in(Type::getId, videoTypeIds) //构建in子句
                     .select(Type::getTypeName); // 指定要查询的字段
 
             List<String> typeNameList = typeMapper.selectList(typeWrapper)
                     .stream()
                     .map(Type::getTypeName)
                     .collect(Collectors.toList());
-            typeWrapper.clear();
 
             //5. 封装vo对象条件
-            for (VideoVo videoVo : videoWithRatingList) {
-                VideoHotVo videoHotVo = new VideoHotVo();
-                videoHotVo.setId(videoVo.getId());
-                videoHotVo.setTitle(videoVo.getTitle());
-                videoHotVo.setCoverUrl(videoVo.getCoverUrl());
-                videoHotVo.setCategoryName(videoVo.getCategoryName());
-                videoHotVo.setPlayCount(1);
-                videoHotVo.setRating(videoVo.getRating());
-                videoHotVo.setTypeList(typeNameList);
-                videoHotVoList.add(videoHotVo);
-            }
+            VideoHotVo videoHotVo = new VideoHotVo();
+            videoHotVo.setId(videoVo.getId());
+            videoHotVo.setTitle(videoVo.getTitle());
+            videoHotVo.setCoverUrl(videoVo.getCoverUrl());
+            videoHotVo.setCategoryName(videoVo.getCategoryName());
+            videoHotVo.setPlayCount(9999);
+            videoHotVo.setRating(videoVo.getRating());
+            videoHotVo.setTypeList(typeNameList);
+            videoHotVoList.add(videoHotVo);
         }
         return videoHotVoList;
     }
