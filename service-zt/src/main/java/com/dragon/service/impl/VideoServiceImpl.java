@@ -116,7 +116,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Transactional
     @Override
     public List<VideoHotVo> hotBroadcast() {
-        //1. 查询video表关联评分表数据
+        List<VideoHotVo> videoHotVoList = new ArrayList<>();//存储热播数据
+        //1. 查询video表关联评分表数据，根据评分降序
         List<VideoVo> videoWithRatingList = this.baseMapper.selectVideoWithRating();
         //2. 获取视频id
         List<Integer> videoIdList = videoWithRatingList.stream().map(VideoVo::getId).collect(Collectors.toList());
@@ -136,29 +137,29 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         //4. 根据对应类型id集合查询类型名称
         LambdaQueryWrapper<Type> typeWrapper = new LambdaQueryWrapper<>();
-        typeWrapper.eq(Type::getStatus,1) // 类型状态为1
-                .select(Type::getTypeName); // 指定要查询的字段
-
         for (List<Integer> videoTypeId : allVideoTypeIds) {
-            typeWrapper.in(Type::getId,videoTypeId); //构建in子句
-        }
-        List<String> typeNameList = typeMapper.selectList(typeWrapper)
-                .stream()
-                .map(Type::getTypeName)
-                .collect(Collectors.toList());
+            typeWrapper.eq(Type::getStatus,1) // 类型状态为1
+                    .in(Type::getId,videoTypeId) //构建in子句
+                    .select(Type::getTypeName); // 指定要查询的字段
 
-        //5. 封装vo对象条件
-        List<VideoHotVo> videoHotVoList = new ArrayList<>();
-        VideoHotVo videoHotVo = new VideoHotVo();
-        for (VideoVo videoVo : videoWithRatingList) {
-            videoHotVo.setId(videoVo.getId());
-            videoHotVo.setTitle(videoVo.getTitle());
-            videoHotVo.setCoverUrl(videoVo.getCoverUrl());
-            videoHotVo.setCategoryName(videoVo.getCategoryName());
-            videoHotVo.setPlayCount(1);
-            videoHotVo.setRating(videoVo.getRating());
-            videoHotVo.setTypeList(typeNameList);
-            videoHotVoList.add(videoHotVo);
+            List<String> typeNameList = typeMapper.selectList(typeWrapper)
+                    .stream()
+                    .map(Type::getTypeName)
+                    .collect(Collectors.toList());
+            typeWrapper.clear();
+
+            //5. 封装vo对象条件
+            for (VideoVo videoVo : videoWithRatingList) {
+                VideoHotVo videoHotVo = new VideoHotVo();
+                videoHotVo.setId(videoVo.getId());
+                videoHotVo.setTitle(videoVo.getTitle());
+                videoHotVo.setCoverUrl(videoVo.getCoverUrl());
+                videoHotVo.setCategoryName(videoVo.getCategoryName());
+                videoHotVo.setPlayCount(1);
+                videoHotVo.setRating(videoVo.getRating());
+                videoHotVo.setTypeList(typeNameList);
+                videoHotVoList.add(videoHotVo);
+            }
         }
         return videoHotVoList;
     }

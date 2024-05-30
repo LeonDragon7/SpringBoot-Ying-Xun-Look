@@ -30,10 +30,10 @@ public interface VideoMapper extends BaseMapper<Video> {
     List<VideoReRmVo> getVideoByDynamic(Map<String,Object> map);
 
     /**
-     * 查询视频数据带评分名称
+     * 查询视频数据，根据评分降序排序
      * @return
      */
-    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id")
+    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id order by rating desc")
     List<VideoVo> selectVideoWithRating();
 
     /**
