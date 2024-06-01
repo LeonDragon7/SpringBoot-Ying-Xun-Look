@@ -65,7 +65,7 @@ public interface VideoMapper extends BaseMapper<Video> {
      * 限制五条
      * @return
      */
-    @Select("select v1.title,v1.cover_url,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 order by rating limit 0,5")
+    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 order by rating limit 0,5")
     List<VideoReRmVo> getHotRating();
 
     /**
