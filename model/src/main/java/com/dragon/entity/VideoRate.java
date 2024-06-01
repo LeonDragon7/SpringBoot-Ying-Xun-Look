@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.Year;
+import java.util.Date;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

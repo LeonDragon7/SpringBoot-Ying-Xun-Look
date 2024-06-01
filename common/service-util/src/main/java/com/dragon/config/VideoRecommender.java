@@ -35,9 +35,9 @@ public class VideoRecommender {
 
     // 基于用户的推荐算法
     public List<Integer> userBasedRecommender(Integer userID,int size) throws TasteException {
-        UserSimilarity similarity  = new EuclideanDistanceSimilarity(dataModel );
-        NearestNUserNeighborhood neighbor = new NearestNUserNeighborhood(NEIGHBORHOOD_NUM, similarity, dataModel );
-        Recommender recommender = new CachingRecommender(new GenericUserBasedRecommender(dataModel , neighbor, similarity));
+        UserSimilarity similarity  = new EuclideanDistanceSimilarity(dataModel);
+        NearestNUserNeighborhood neighbor = new NearestNUserNeighborhood(NEIGHBORHOOD_NUM, similarity, dataModel);
+        Recommender recommender = new CachingRecommender(new GenericUserBasedRecommender(dataModel,neighbor,similarity));
         List<RecommendedItem> recommendations = recommender.recommend(userID, size);
         return getRecommendedItemIDs(recommendations);
     }

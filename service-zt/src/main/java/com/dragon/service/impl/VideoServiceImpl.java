@@ -202,7 +202,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 if(!videoRateList.isEmpty()){
                     //基于用户推荐
                     try {
-                        List<Integer> animeIdList = videoRecommender.itemBasedRecommender(user.getId(), RecommendConstant.RECOMMEND_SIZE);
+                        List<Integer> animeIdList = videoRecommender.userBasedRecommender(user.getId(), RecommendConstant.RECOMMEND_SIZE);
                         if(animeIdList.isEmpty()) recommendVideoList.addAll(new ArrayList<>());
                         else recommendVideoList.addAll(this.listByIds(animeIdList));
                     } catch (TasteException e) {
