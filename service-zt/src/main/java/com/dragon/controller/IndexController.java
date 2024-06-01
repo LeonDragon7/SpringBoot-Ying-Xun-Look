@@ -2,6 +2,7 @@ package com.dragon.controller;
 
 import com.dragon.result.Result;
 import com.dragon.service.VideoService;
+import com.dragon.task.VideoTask;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
 import io.swagger.annotations.Api;
@@ -38,6 +39,9 @@ public class IndexController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private VideoTask videoTask;
 
     /**
      * 最近更新
@@ -104,7 +108,7 @@ public class IndexController {
     @ApiOperation("每周更新")
     @GetMapping(value = "/weekUpdate")
     public Result<List<VideoReRmVo>> weekUpdate(){
-        List<VideoReRmVo> weekUpdateList = videoService.weekUpdate();
+        List<VideoReRmVo> weekUpdateList = videoTask.weekUpdate();
         return Result.success(weekUpdateList);
     }
 }
