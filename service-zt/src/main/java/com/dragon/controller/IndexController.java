@@ -103,16 +103,9 @@ public class IndexController {
      */
     @ApiOperation("每周更新")
     @GetMapping(value = "/weekUpdate")
-    public Result<Flux<ServerSentEvent<List<VideoReRmVo>>>> weekUpdate(){
-        return Result.success(Flux.interval(Duration.ofDays(7))
-                .map(sequence ->{
-                    List<VideoReRmVo> weekUpdateList = videoService.weekUpdate();
-                    return ServerSentEvent.<List<VideoReRmVo>>builder()
-                            .id(String.valueOf(sequence))
-                            .event("weekUpdate")
-                            .data(weekUpdateList)
-                            .build();
-                }));
+    public Result<List<VideoReRmVo>> weekUpdate(){
+        List<VideoReRmVo> weekUpdateList = videoService.weekUpdate();
+        return Result.success(weekUpdateList);
     }
 }
 
