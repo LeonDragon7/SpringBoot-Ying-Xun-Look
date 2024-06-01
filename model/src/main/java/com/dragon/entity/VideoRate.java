@@ -48,5 +48,5 @@ public class VideoRate {
     /**
      * 电影上映时间
      */
-    private Year releaseTime;
+    private Date releaseTime;
 }

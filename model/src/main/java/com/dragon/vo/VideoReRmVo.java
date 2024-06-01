@@ -3,6 +3,7 @@ package com.dragon.vo;
 import lombok.Data;
 
 import java.time.Year;
+import java.util.Date;
 
 @Data
 public class VideoReRmVo {
@@ -21,7 +22,7 @@ public class VideoReRmVo {
     /**
      * 视频的年代
      */
-    private Year year;
+    private Date year;
 
     /**
      * 评分

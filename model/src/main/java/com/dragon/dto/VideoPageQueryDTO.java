@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.Date;
 
 @Data
 public class VideoPageQueryDTO implements Serializable {
@@ -34,7 +35,7 @@ public class VideoPageQueryDTO implements Serializable {
     /**
      * 视频的年代
      */
-    private Year year;
+    private Date year;
 
     /**
      * 视频的制作地区

@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -51,7 +53,7 @@ public class Video extends BaseEntity {
     /**
      * 视频的年代
      */
-    private Year year;
+    private Date year;
 
     /**
      * 视频的制作地区
