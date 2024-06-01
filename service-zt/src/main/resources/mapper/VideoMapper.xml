@@ -6,19 +6,19 @@
         select * from video
         <where>
             <if test="categoryName != null">
-                and categoryName = #{categoryName}
+                and category_name = #{categoryName}
             </if>
             <if test="price != null">
                 and price = #{price}
             </if>
             <if test="type != null">
-                and type = #{type}
+                and `type` = #{type}
             </if>
             <if test="status != null">
                 and status = #{status}
             </if>
             <if test="isDeleted != null">
-                and isDeleted = #{is_deleted}
+                and is_deleted = #{isDeleted}
             </if>
         </where>
         order by year limit 0,5

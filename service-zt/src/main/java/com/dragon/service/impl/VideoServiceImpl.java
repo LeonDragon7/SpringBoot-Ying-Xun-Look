@@ -447,7 +447,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 Map<String, Object> map = new HashMap<>();
                 map.put("categoryName", "电影");
                 map.put("price", 1);
-                map.put("type", typeCount);
+                map.put("type", 1);
                 map.put("status", 1);
                 map.put("isDeleted", 1);
                 return this.baseMapper.getVideoByDynamic(map);
