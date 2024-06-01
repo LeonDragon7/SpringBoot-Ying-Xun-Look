@@ -55,7 +55,7 @@
                 and type like concat('%',#{type},'%')
             </if>
             <if test = "year != null and year != ''">
-                and year like concat('%',#{year},'%')
+                and `year` like concat('%',#{year},'%')
             </if>
             <if test = "region != null and region != ''">
                 and region like concat('%',#{region},'%')
@@ -66,8 +66,8 @@
             <if test="end != null">
                 and play_time &lt; #{end}
             </if>
-            order by play_count desc
         </where>
+        order by play_count desc
     </select>
 
     <!-- 动态条件分页查询 - 最新上线 -->
@@ -84,16 +84,16 @@
                 and price like concat('%',#{price},'%')
             </if>
             <if test = "type != null and type != ''">
-                and type like concat('%',#{type},'%')
+                and `type` like concat('%',#{type},'%')
             </if>
             <if test = "year != null and year != ''">
-                and year like concat('%',#{year},'%')
+                and `year` like concat('%',#{year},'%')
             </if>
             <if test = "region != null and region != ''">
                 and region like concat('%',#{region},'%')
             </if>
-            order by create_time desc
         </where>
+        order by create_time desc
     </select>
 
     <!-- 动态条件分页查询 - 最受欢迎 -->
@@ -110,16 +110,16 @@
                 and price like concat('%',#{price},'%')
             </if>
             <if test = "type != null and type != ''">
-                and type like concat('%',#{type},'%')
+                and `type` like concat('%',#{type},'%')
             </if>
             <if test = "year != null and year != ''">
-                and year like concat('%',#{year},'%')
+                and `year` like concat('%',#{year},'%')
             </if>
             <if test = "region != null and region != ''">
                 and region like concat('%',#{region},'%')
             </if>
-            order by rating desc
         </where>
+        order by rating desc
     </select>
 
     <!-- 分页查询 - 历史观看 -->

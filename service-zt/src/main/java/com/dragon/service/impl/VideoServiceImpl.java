@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
@@ -354,21 +355,29 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public PageResult pageList(VideoPageQueryDTO videoPageQueryDTO) {
         Map<String, Object> map = new HashMap<>();
-
-        //1. 本周热播
-        //1.1 获取当前时间
+        //获取当前时间
         LocalDateTime now = LocalDateTime.now();
-        //1.2 计算本周的星期一的零点
-        LocalDateTime beginTime = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                .with(LocalTime.MIDNIGHT);
-        //1.3 计算当前时间本周的星期天的23:59:59
-        LocalDateTime endTime = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-                .with(LocalTime.MAX)
-                .minusNanos(1); // 减去一个纳秒，将时间调整为23:59:59
-        //2. 封装数据
-        map.put("begin",beginTime);
-        map.put("end",endTime);
-        map.put("vp",videoPageQueryDTO);
+        if(videoPageQueryDTO.getPageTag() == 1) {
+            //1. 本周热播
+            //1.1 计算本周的星期一的零点
+            LocalDateTime beginTime = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                    .with(LocalTime.MIDNIGHT);
+            //1.2 计算当前时间本周的星期天的23:59:59
+            LocalDateTime endTime = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                    .with(LocalTime.MAX)
+                    .minusNanos(1); // 减去一个纳秒，将时间调整为23:59:59
+            //1.3 封装数据
+            map.put("begin", beginTime);
+            map.put("end", endTime);
+        }else{
+            //2. 历史热播
+            //2.1 获取1949新中国成立时间
+            LocalDateTime chineseStart = LocalDate.of(1949, 1, 1).atStartOfDay();
+            //2.2 封装数据
+            map.put("begin", chineseStart);
+            map.put("end", now);
+        }
+        map.put("vp", videoPageQueryDTO);
         //3. 返回数据
         return page(map);
     }
