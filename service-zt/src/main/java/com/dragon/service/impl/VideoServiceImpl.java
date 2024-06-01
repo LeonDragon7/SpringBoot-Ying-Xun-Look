@@ -25,6 +25,7 @@ import com.dragon.vo.VideoVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
  * @since 2024-05-01
  */
 @Service
+@Slf4j
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
 
     @Autowired
@@ -479,12 +481,14 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 .eq(User::getStatus,0);
         User user = userMapper.selectOne(wrapper);
         //3. 非会员用户
-        if(user.getVip() == 0) throw  new RuntimeExceptionCustom(MessageConstant.NO_VIP_USER);
+        if(user.getVip() == 0) throw new RuntimeExceptionCustom(MessageConstant.NO_VIP_USER);
         //4. 分页查询视频数据
         PageHelper.startPage(commonQueryDTO.getPage(),commonQueryDTO.getPageSize());
         LambdaQueryWrapper<Video> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Video::getStatus,1)
+                .eq(Video::getPrice,2) // 会员视频
                 .eq(Video::getIsDeleted,1);
+        List<Video> videos = this.baseMapper.selectList(queryWrapper);
         //5. 类似转换
         List<VideoReRmVo> videoReRmVoList = this.baseMapper.selectList(queryWrapper).stream().map(v -> {
             VideoReRmVo videoReRmVo = new VideoReRmVo();
