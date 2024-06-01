@@ -415,7 +415,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public PageResult historyView(CommonQueryDTO commonQueryDTO) {
         //1. 获取当前用户id
-        Integer userId = 1;
+        Integer userId = LoginUserInfoHelper.getUser().getId();
 
         //2. 分页查询
         PageHelper.startPage(commonQueryDTO.getPage(), commonQueryDTO.getPageSize());
