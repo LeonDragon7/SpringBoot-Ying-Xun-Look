@@ -16,7 +16,7 @@ public class MahoutConfig {
 
     @Bean(autowire = Autowire.BY_NAME,value = "mySQLDataModel")
     public DataModel getMySQLJDBCDataModel(){
-        return new MySQLJDBCDataModel(dataSource,"rating","user_id",
-                "movie_id","rating", "time");
+        return new MySQLJDBCDataModel(dataSource,"video_rate","user_id",
+                "video_id","rating", "release_time");
     }
 }

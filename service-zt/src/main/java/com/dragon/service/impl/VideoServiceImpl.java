@@ -198,12 +198,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             //1.2 缓存数据是空
             if(StrUtil.isBlank(recommend)){
                 //用户打过分且分类名称是电影或者动漫
-                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(userId, categoryName);
+                List<VideoRate> videoRateList = videoRateMapper.findAllByUserId(user.getId(), categoryName);
                 if(!videoRateList.isEmpty()){
                     //基于用户推荐
                     try {
-                        List<Integer> animeIdList = videoRecommender.itemBasedRecommender(userId, RecommendConstant.RECOMMEND_SIZE);
-                        recommendVideoList.addAll(this.listByIds(animeIdList));
+                        List<Integer> animeIdList = videoRecommender.itemBasedRecommender(user.getId(), RecommendConstant.RECOMMEND_SIZE);
+                        if(animeIdList.isEmpty()) recommendVideoList.addAll(new ArrayList<>());
+                        else recommendVideoList.addAll(this.listByIds(animeIdList));
                     } catch (TasteException e) {
                         throw new RuntimeException(e);
                     }
