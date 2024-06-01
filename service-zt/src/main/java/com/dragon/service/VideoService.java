@@ -81,12 +81,6 @@ public interface VideoService extends IService<Video> {
     PageResult historyView(CommonQueryDTO commonQueryDTO);
 
     /**
-     * 每周更新
-     * @return
-     */
-    List<VideoReRmVo> weekUpdate();
-
-    /**
      * 会员专区
      * @param commonQueryDTO
      * @return
