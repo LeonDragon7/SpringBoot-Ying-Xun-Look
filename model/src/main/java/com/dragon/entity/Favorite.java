@@ -3,6 +3,8 @@ package com.dragon.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,6 +40,28 @@ public class Favorite extends BaseEntity {
      * 收藏视频数量
      */
     private Integer count;
+
+    /**
+     * 注册时间
+     */
+    private LocalDateTime createTime;
+
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
+
+    /**
+     * 注册用户
+     */
+    private Integer createUser;
+
+
+    /**
+     * 更新用户
+     */
+    private Integer updateUser;
 
     /**
      * 是否删除 0否 1已删除
