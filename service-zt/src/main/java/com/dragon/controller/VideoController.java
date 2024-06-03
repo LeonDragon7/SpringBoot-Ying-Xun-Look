@@ -35,8 +35,8 @@ public class VideoController {
      * @return
      */
     @ApiOperation("根据id获取视频详情信息")
-    @GetMapping("/{id}")
-    public Result<VideoDetailVo> getById(@PathVariable Integer id){
+    @GetMapping("/getById")
+    public Result<VideoDetailVo> getById(@RequestParam Integer id){
         VideoDetailVo videoDetail =  videoService.getVideoDetail(id);
         return Result.success(videoDetail);
     }
