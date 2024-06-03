@@ -8,6 +8,7 @@ import com.dragon.result.PageResult;
 import com.dragon.vo.VideoDetailVo;
 import com.dragon.vo.VideoHotVo;
 import com.dragon.vo.VideoReRmVo;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,7 @@ public interface VideoService extends IService<Video> {
      * 猜你喜欢
      * @return
      */
-    List<VideoReRmVo> getLike();
+    List<VideoReRmVo> getLike(Integer userId);
 
     /**
      * 视频条件分页查询

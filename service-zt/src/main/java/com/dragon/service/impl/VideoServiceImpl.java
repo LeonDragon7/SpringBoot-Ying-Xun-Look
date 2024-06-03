@@ -25,6 +25,7 @@ import com.dragon.vo.VideoVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -319,9 +320,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * @return
      */
     @Override
-    public List<VideoReRmVo> getLike() {
-        //1. 获取当前用户id
-        Integer userId = LoginUserInfoHelper.getUser().getId();
+    public List<VideoReRmVo> getLike(Integer userId) {
+        //1. 用户未登录
+        if(userId == null) return this.baseMapper.getHotRating();
         //2. 根据当前用户id获取用户视频关联信息
         LambdaQueryWrapper<UserVideo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserVideo::getCollect,1)// 收藏 1

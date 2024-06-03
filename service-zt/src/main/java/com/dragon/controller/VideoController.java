@@ -47,8 +47,8 @@ public class VideoController {
      */
     @ApiOperation("猜你喜欢")
     @GetMapping("/like")
-    public Result<List<VideoReRmVo>> like(){
-        List<VideoReRmVo> videoLikeList = videoService.getLike();
+    public Result<List<VideoReRmVo>> like(@RequestParam Integer userId){
+        List<VideoReRmVo> videoLikeList = videoService.getLike(userId);
         return Result.success(videoLikeList);
     }
 
