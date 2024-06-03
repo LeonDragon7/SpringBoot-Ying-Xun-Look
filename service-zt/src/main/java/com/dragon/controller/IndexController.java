@@ -14,6 +14,7 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
@@ -75,8 +76,8 @@ public class IndexController {
      */
     @ApiOperation("电影推荐")
     @GetMapping("/recommendMovie")
-    public Result<List<VideoReRmVo>> recommendMovie(){
-        List<VideoReRmVo> videoRecommendList = videoService.recommendMovie();
+    public Result<List<VideoReRmVo>> recommendMovie(@RequestParam Integer userId){
+        List<VideoReRmVo> videoRecommendList = videoService.recommendMovie(userId);
         return Result.success(videoRecommendList);
     }
 
@@ -86,8 +87,8 @@ public class IndexController {
      */
     @ApiOperation("动漫推荐")
     @GetMapping("/recommendAnime")
-    public Result<List<VideoReRmVo>> recommendAnime(){
-        List<VideoReRmVo> videoRecommendList = videoService.recommendAnime();
+    public Result<List<VideoReRmVo>> recommendAnime(@RequestParam Integer userId){
+        List<VideoReRmVo> videoRecommendList = videoService.recommendAnime(userId);
         return Result.success(videoRecommendList);
     }
 

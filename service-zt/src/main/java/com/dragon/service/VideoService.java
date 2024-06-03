@@ -38,13 +38,13 @@ public interface VideoService extends IService<Video> {
      * 电影推荐
      * @return
      */
-    List<VideoReRmVo> recommendMovie();
+    List<VideoReRmVo> recommendMovie(Integer userId);
 
     /**
      * 动漫推荐
      * @return
      */
-    List<VideoReRmVo> recommendAnime();
+    List<VideoReRmVo> recommendAnime(Integer userId);
 
     /**
      * 获取视频详细信息

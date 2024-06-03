@@ -172,8 +172,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * @return
      */
     @Override
-    public List<VideoReRmVo> recommendMovie() {
-        return this.recommend(RecommendConstant.RECOMMEND_MOVIE);
+    public List<VideoReRmVo> recommendMovie(Integer userId) {
+        //用户未登录
+        if(userId == null){
+            // 返回电影数据 评分从高到低
+            return this.baseMapper.getHotRatingByCategoryName(RecommendConstant.RECOMMEND_MOVIE);
+        }
+        return this.recommend(RecommendConstant.RECOMMEND_MOVIE,userId);
     }
 
     /**
@@ -181,17 +186,21 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      * @return
      */
     @Override
-    public List<VideoReRmVo> recommendAnime() {
-      return this.recommend(RecommendConstant.RECOMMEND_ANIME);
+    public List<VideoReRmVo> recommendAnime(Integer userId) {
+        //用户未登录
+        if(userId == null){
+            // 返回动漫数据 评分从高到低
+            return this.baseMapper.getHotRatingByCategoryName(RecommendConstant.RECOMMEND_ANIME);
+        }
+      return this.recommend(RecommendConstant.RECOMMEND_ANIME,userId);
     }
 
     /**
      * 推荐功能
      * @return
      */
-    private List<VideoReRmVo> recommend(String categoryName) {
+    private List<VideoReRmVo> recommend(String categoryName,Integer userId) {
         List<Video> recommendVideoList = new ArrayList<>();
-        int userId = LoginUserInfoHelper.getUser().getId();
         String recommend = "";
         //1.用户已登录
         User user = userMapper.selectById(userId);

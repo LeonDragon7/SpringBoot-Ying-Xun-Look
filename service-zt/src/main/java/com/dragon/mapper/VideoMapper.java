@@ -31,6 +31,7 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     /**
      * 查询视频数据，根据评分降序排序
+     * 不限
      * @return
      */
     @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id order by rating desc")
@@ -65,8 +66,17 @@ public interface VideoMapper extends BaseMapper<Video> {
      * 限制五条
      * @return
      */
-    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 order by rating limit 0,5")
+    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 order by rating desc limit 0,5")
     List<VideoReRmVo> getHotRating();
+
+    /**
+     * 通过评分由高到低排序
+     * 限制五条
+     * 根据影视分类
+     * @return
+     */
+    @Select("select v1.*,v2.rating from video v1 join video_rate v2 on v1.id = v2.video_id where 1=1 and v1.category_name = #{categoryName} order by rating desc limit 0,5")
+    List<VideoReRmVo> getHotRatingByCategoryName(String categoryName);
 
     /**
      * 动态条件分页查询 - 本周热播/历史热播
