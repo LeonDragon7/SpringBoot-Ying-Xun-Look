@@ -42,23 +42,23 @@
     <select id="pageWeekList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video v join screen_flicker.user_video uv on v.id = uv.video_id
         <where>
-            <if test = "title != null and title != ''">
-                and title like concat('%',#{title},'%')
+            <if test = "vp.title != null and vp.title != ''">
+                and title like concat('%',#{vp.title},'%')
             </if>
-            <if test = "categoryName != null and categoryName != ''">
-                and category_name like concat('%',#{categoryName},'%')
+            <if test = "vp.categoryName != null and vp.categoryName != ''">
+                and category_name like concat('%',#{vp.categoryName},'%')
             </if>
-            <if test = "price != null and price != ''">
-                and price like concat('%',#{price},'%')
+            <if test = "vp.price != null and vp.price != ''">
+                and price like concat('%',#{vp.price},'%')
             </if>
-            <if test = "type != null and type != ''">
-                and type like concat('%',#{type},'%')
+            <if test = "vp.type != null and vp.type != ''">
+                and type like concat('%',#{vp.type},'%')
             </if>
-            <if test = "year != null and year != ''">
-                and `year` like concat('%',#{year},'%')
+            <if test = "vp.year != null and vp.year != ''">
+                and `year` like concat('%',#{vp.year},'%')
             </if>
-            <if test = "region != null and region != ''">
-                and region like concat('%',#{region},'%')
+            <if test = "vp.region != null and vp.region != ''">
+                and region like concat('%',#{vp.region},'%')
             </if>
             <if test="begin != null">
                 and play_time &gt; #{begin}
@@ -74,23 +74,23 @@
     <select id="pageNewList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video
         <where>
-            <if test = "title != null and title != ''">
-                and title like concat('%',#{title},'%')
+            <if test = "vp.title != null and vp.title != ''">
+                and title like concat('%',#{vp.title},'%')
             </if>
-            <if test = "categoryName != null and categoryName != ''">
-                and category_name like concat('%',#{categoryName},'%')
+            <if test = "vp.categoryName != null and vp.categoryName != ''">
+                and category_name like concat('%',#{vp.categoryName},'%')
             </if>
-            <if test = "price != null and price != ''">
-                and price like concat('%',#{price},'%')
+            <if test = "vp.price != null and vp.price != ''">
+                and price like concat('%',#{vp.price},'%')
             </if>
-            <if test = "type != null and type != ''">
-                and `type` like concat('%',#{type},'%')
+            <if test = "vp.type != null and vp.type != ''">
+                and type like concat('%',#{vp.type},'%')
             </if>
-            <if test = "year != null and year != ''">
-                and `year` like concat('%',#{year},'%')
+            <if test = "vp.year != null and vp.year != ''">
+                and `year` like concat('%',#{vp.year},'%')
             </if>
-            <if test = "region != null and region != ''">
-                and region like concat('%',#{region},'%')
+            <if test = "vp.region != null and vp.region != ''">
+                and region like concat('%',#{vp.region},'%')
             </if>
         </where>
         order by create_time desc
@@ -100,23 +100,23 @@
     <select id="pageRatingList" parameterType="java.util.Map" resultType="com.dragon.vo.VideoReRmVo">
         select * from video join screen_flicker.video_rate vr on video.id = vr.video_id
         <where>
-            <if test = "title != null and title != ''">
-                and title like concat('%',#{title},'%')
+            <if test = "vp.title != null and vp.title != ''">
+                and title like concat('%',#{vp.title},'%')
             </if>
-            <if test = "categoryName != null and categoryName != ''">
-                and category_name like concat('%',#{categoryName},'%')
+            <if test = "vp.categoryName != null and vp.categoryName != ''">
+                and category_name like concat('%',#{vp.categoryName},'%')
             </if>
-            <if test = "price != null and price != ''">
-                and price like concat('%',#{price},'%')
+            <if test = "vp.price != null and vp.price != ''">
+                and price like concat('%',#{vp.price},'%')
             </if>
-            <if test = "type != null and type != ''">
-                and `type` like concat('%',#{type},'%')
+            <if test = "vp.type != null and vp.type != ''">
+                and type like concat('%',#{vp.type},'%')
             </if>
-            <if test = "year != null and year != ''">
-                and `year` like concat('%',#{year},'%')
+            <if test = "vp.year != null and vp.year != ''">
+                and `year` like concat('%',#{vp.year},'%')
             </if>
-            <if test = "region != null and region != ''">
-                and region like concat('%',#{region},'%')
+            <if test = "vp.region != null and vp.region != ''">
+                and region like concat('%',#{vp.region},'%')
             </if>
         </where>
         order by rating desc
