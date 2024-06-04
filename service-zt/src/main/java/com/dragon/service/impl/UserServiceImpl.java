@@ -176,6 +176,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token",token);
         tokenMap.put("id",user.getId());
+        tokenMap.put("avatar",user.getAvatar());
+        tokenMap.put("nickname",user.getNickname());
         return tokenMap;
     }
 }
