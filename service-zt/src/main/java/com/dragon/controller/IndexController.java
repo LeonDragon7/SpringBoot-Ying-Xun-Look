@@ -76,7 +76,7 @@ public class IndexController {
      */
     @ApiOperation("电影推荐")
     @GetMapping("/recommendMovie")
-    public Result<List<VideoReRmVo>> recommendMovie(@RequestParam Integer userId){
+    public Result<List<VideoReRmVo>> recommendMovie(Integer userId){
         List<VideoReRmVo> videoRecommendList = videoService.recommendMovie(userId);
         return Result.success(videoRecommendList);
     }
@@ -87,7 +87,7 @@ public class IndexController {
      */
     @ApiOperation("动漫推荐")
     @GetMapping("/recommendAnime")
-    public Result<List<VideoReRmVo>> recommendAnime(@RequestParam Integer userId){
+    public Result<List<VideoReRmVo>> recommendAnime(Integer userId){
         List<VideoReRmVo> videoRecommendList = videoService.recommendAnime(userId);
         return Result.success(videoRecommendList);
     }
