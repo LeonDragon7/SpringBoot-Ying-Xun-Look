@@ -175,6 +175,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //5. 返回token
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token",token);
+        tokenMap.put("id",user.getId());
         return tokenMap;
     }
 }
