@@ -78,7 +78,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 //保存用户信息到 ThreadLocal
                 LoginUserInfoHelper.saveUser(userVo);
                 //刷新token有效期
-                redisTemplate.expire(key,LOGIN_USER_TTL, TimeUnit.MINUTES);
+                redisTemplate.expire(key,LOGIN_USER_TTL, TimeUnit.HOURS);
 
                 // 获取用户权限信息并创建SimpleGrantedAuthority对象列表
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
