@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favicon.ico","/static/images/**","/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**",
+        web.ignoring().antMatchers("/favicon.ico","/static/**","/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**",
                 "/doc.html","/client/user/**","/client/index/**","/client/video/getById","/client/video/like","/client/video/pageQuery");
     }
 }
