@@ -35,8 +35,7 @@ public class VideoPageQueryDTO implements Serializable {
     /**
      * 视频的年代
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date year;
+    private String year;
 
     /**
      * 视频的制作地区
